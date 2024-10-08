@@ -1,0 +1,1 @@
+"Esta rama servir  para corregir errores de la rama principal: aquellos problemas que surjan desde la rama principal por x o por y se pasar  a esta rama y se corregir  para su posterior merge" 
