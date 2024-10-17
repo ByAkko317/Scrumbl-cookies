@@ -1,14 +1,14 @@
-'''from dotenv import load_dotenv
-import os''' 
+from dotenv import load_dotenv
+import os 
 import requests
 
 nombre_ciudad=input("Ingrese la ciudad para obtener su pronóstico: ")
 nombre_pais=input("Ingrese el pais de la ciudad: ")
 
-'''load_dotenv('/Proyecto Integrador/api.env')
-api= os.getenv('api')
-print(api)'''
-api="abf47be9918bb6eb6fb7cdd893089636"
+load_dotenv()
+api= os.getenv('API')
+print(api)
+#api="abf47be9918bb6eb6fb7cdd893089636"
 unidad_de_medida="metric"#tiene distintas variantes, por default es kelvin, y el resto son metric(celsius) e imperial(fahrenheit),
 url= f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&appid={api}&units={unidad_de_medida}"
 #Holis
