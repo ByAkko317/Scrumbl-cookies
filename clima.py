@@ -3,8 +3,36 @@ import os
 import requests
 from requests.exceptions import Timeout, ConnectionError, HTTPError, RequestException
 
-nombre_ciudad=input("Ingrese la ciudad para obtener su pronóstico: ")
-nombre_pais=input("Ingrese el pais de la ciudad: ")
+def validar_ciudad():
+    while True:
+        ciudad = input("Por favor, introduce el nombre de una ciudad: ")
+        
+        if not ciudad.strip():
+            print("El nombre de la ciudad no puede estar vacío. Inténtalo de nuevo.")
+            continue
+        
+        if not ciudad.replace(" ", "").isalpha():
+            print("El nombre de la ciudad solo debe contener letras y espacios. Inténtalo de nuevo.")
+            continue
+        
+        return ciudad
+
+def validar_pais():
+    while True:
+        pais = input("Introduce el nombre del país de la ciudad: ")
+        
+        if not pais.strip():
+            print("El nombre del país no puede estar vacío. Inténtalo de nuevo.")
+            continue
+        
+        if not pais.replace(" ", "").isalpha():
+            print("El nombre del país solo debe contener letras y espacios. Inténtalo de nuevo.")
+            continue
+        
+        return pais
+
+nombre_ciudad = validar_ciudad()
+nombre_pais= validar_pais()
 
 load_dotenv()
 api= os.getenv('API')
