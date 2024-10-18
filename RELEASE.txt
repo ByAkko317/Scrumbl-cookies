@@ -1,1 +1,0 @@
-"Esta rama servir  para la correcci¢n y revisi¢n de los desarrollos individuales de cada integrante, donde en conjunto se realizar  la tarea previa para posteriormente lanzar el trabajo a la rama principal, listo para producci¢n" 
