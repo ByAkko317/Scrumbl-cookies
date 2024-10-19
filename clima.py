@@ -38,7 +38,7 @@ class ApiRequestHandler:
             return {"status": "error", "message": f"Error en la solicitud: {req_err}"}
         except Exception as err:
             return {"status": "error", "message": f"Ocurrió un error inesperado: {err}"}
-
+    #funcion para reintentar la la solicitud, con 3 reintentos
     def retry_request(self, retries=3):
         for attempt in range(retries):
             result = self.make_request()
@@ -57,11 +57,11 @@ def validar_ciudad():
     while True:
         ciudad = input("Por favor, introduce el nombre de una ciudad: ")
         
-        if not ciudad.strip():
+        if not ciudad.strip():#.strip es para asegurarse que el valor ingresado no esté vacío
             print("El nombre de la ciudad no puede estar vacío. Inténtalo de nuevo.")
             continue
         
-        if not ciudad.replace(" ", "").isalpha():
+        if not ciudad.replace(" ", "").isalpha():#.isalpha para corroborar que no hayan ni números ni caracteres especiales
             print("El nombre de la ciudad solo debe contener letras y espacios. Inténtalo de nuevo.")
             continue
         
@@ -82,16 +82,16 @@ def validar_pais():
         return pais
 
 def obtener_clima(nombre_ciudad, nombre_pais):
-    load_dotenv()
+    load_dotenv()#obtención de datos de .env
     api = os.getenv('API')
     unidad_de_medida = "metric"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
     
-    api_handler = ApiRequestHandler(url)
+    api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
 
     if result["status"] == "success":
-        data = result["data"]
+        data = result["data"]#navegación dentro del JSON obtenido en formato diccionario, utilizando slicing
         clima = data['weather'][0]['description']
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
@@ -178,24 +178,24 @@ def ejecutar_opcion(opcion):
 
 def preguntar_volver_al_menu():
     while True:
-        respuesta = input("¿Desea volver al menú? (s/n): ").strip().lower()
-        if respuesta == 's':
+        respuesta = input("¿Desea volver al menú? (si/no): ").strip().lower()
+        if respuesta == 'si':
             return True  # Volver al menú
-        elif respuesta == 'n':
+        elif respuesta == 'no':
             print("Saliendo del programa...")
             return False  # Finalizar programa
         else:
-            print("Respuesta no válida. Por favor, ingresa 's' para sí o 'n' para no.")
+            print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
 
 def main():
-    while True:
-        mostrar_menu()
+    while True:#funcion main del codigo, donde se hace las llamadas originales
+        mostrar_menu()#llamada a la función menú
         try:
             seleccion = int(input("Selecciona una opción (1-5): "))
             continuar = ejecutar_opcion(seleccion)
             if not continuar:
                 break
-            if not preguntar_volver_al_menu():
+            if not preguntar_volver_al_menu():#llamada la función que al finalizar la ejecución de alguna de las opciones del menú, consulte si volver al mismo o salir
                 break
             time.sleep(2)
         except ValueError:
