@@ -89,6 +89,7 @@ def guardar_en_historial(ciudad, pais, informacion):
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
     consulta += f"Condiciones climáticas: {informacion['clima']}"
+
     
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
