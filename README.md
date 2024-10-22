@@ -2,7 +2,11 @@
 >[!IMPORTANT]
 >Ejecutar estos comandos en la terminal antes para poder correr el contenedor del programa: 
 >"docker build -t app_clima:1.0 .";
+<<<<<<< HEAD
 >"docker run --it --rm --name app_clima app_clima:1.0 "
+=======
+>"docker run -it --rm --name app_clima app_clima:1.0 "
+>>>>>>> 78d389f236f2b87689a5a9091e693bd8e1997ecd
 
 
 

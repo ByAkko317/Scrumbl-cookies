@@ -38,7 +38,7 @@ class ApiRequestHandler:
             return {"status": "error", "message": f"Error en la solicitud: {req_err}"}
         except Exception as err:
             return {"status": "error", "message": f"Ocurrió un error inesperado: {err}"}
-
+    #funcion para reintentar la la solicitud, con 3 reintentos
     def retry_request(self, retries=3):
         for attempt in range(retries):
             result = self.make_request()
@@ -57,11 +57,11 @@ def validar_ciudad():
     while True:
         ciudad = input("Por favor, introduce el nombre de una ciudad: ")
         
-        if not ciudad.strip():
+        if not ciudad.strip():#.strip es para asegurarse que el valor ingresado no esté vacío
             print("El nombre de la ciudad no puede estar vacío. Inténtalo de nuevo.")
             continue
         
-        if not ciudad.replace(" ", "").isalpha():
+        if not ciudad.replace(" ", "").isalpha():#.isalpha para corroborar que no hayan ni números ni caracteres especiales
             print("El nombre de la ciudad solo debe contener letras y espacios. Inténtalo de nuevo.")
             continue
         
@@ -80,34 +80,58 @@ def validar_pais():
             continue
         
         return pais
+# Función para guardar las consultas en el archivo "Historial.txt"
+def guardar_en_historial(ciudad, pais, informacion):
+    marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    
+    consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
+    consulta += f"Temperatura actual: {informacion['temp_actual']}°C\n"
+    consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
+    consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
+    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
+    
+    if 'alerta' in informacion:
+        consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
+    
+    consulta += "\n-------------------------\n"  # Separador para cada consulta
+
+    # Guardar en el archivo
+    with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
+        archivo.write(consulta)
+        archivo.write("\n")
 
 def obtener_clima(nombre_ciudad, nombre_pais):
-    load_dotenv()
+    load_dotenv()#obtención de datos de .env
     api = os.getenv('API')
     unidad_de_medida = "metric"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
-    historial = open("historial.txt", "a")
-    numero_historial = 1
-
-    api_handler = ApiRequestHandler(url)
+    api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
 
     if result["status"] == "success":
-        data = result["data"]
+        data = result["data"]#navegación dentro del JSON obtenido en formato diccionario, utilizando slicing
         clima = data['weather'][0]['description']
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
         print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura}°C.")
         print(f"Temperatura máxima: {temp_max}°C, Temperatura mínima: {temp_min}°C.")
-        historial.write("Consulta numero ")
-        historial.write("Consulta clima")
-        historial.write(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura}°C.", f"\n Temperatura máxima: {temp_max}°C, Temperatura mínima: {temp_min}°C.")
-        
+        # Preparar información para guardar en el historial
+        informacion = {
+            "temp_actual": temperatura,
+            "temp_max": temp_max,
+            "temp_min": temp_min,
+            "clima": clima
+        }
+
+        # Verificar si hay alertas meteorológicas en los datos recibidos
+        if 'alerts' in data:
+            informacion['alerta'] = data['alerts'][0]['description']
+
+        # Llamar a la función para guardar en el historial
+        guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
     else:
         print(result["message"])
-    historial.write(result["message"])
-    historial.close()
 
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
@@ -141,7 +165,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
         # Mostrar el pronóstico para los próximos 5 días con fenómenos meteorológicos
         for fecha, item in pronosticos_por_dia.items():
             clima = item['clima']
-            temp = item['temp']
+            temperatura = item['temp']
             temp_max = item['temp_max']
             temp_min = item['temp_min']
             fenomenos = item['fenomenos']
@@ -152,21 +176,61 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                 alerta = f"¡Atención! Se esperan {fenomenos.lower()}."
 
             # Mostrar el pronóstico con la información del clima y fenómenos
-            print(f"{fecha}: {clima} con una temperatura de {temp}°C.")
+            print(f"{fecha}: {clima} con una temperatura de {temperatura}°C.")
             print(f"Temperatura máxima: {temp_max:.2f}°C, mínima: {temp_min:.2f}°C.")
-            historial.write(f"{fecha}: {clima} con una temperatura de {temp}°C.")
-            historial.write(f"Temperatura máxima: {temp_max:.2f}°C, mínima: {temp_min:.2f}°C.")
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
-        historial.close()
+            informacion = {
+                "temp_actual": temperatura,
+                "temp_max": temp_max,
+                "temp_min": temp_min,
+                "clima": clima
+            }
+
+            # Verificar si hay alertas meteorológicas en los datos recibidos
+            if 'alerts' in data:
+                informacion['alerta'] = data['alerts'][0]['description']
+
+            # Guardar en el historial
+            guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
     else:
         print(result["message"])
-        historial.write(result["message"])
-        historial.close()
+
 
 def ver_historial():
-    print("Ver historial")
+    try:
+        # Abrir el archivo de historial en modo lectura
+        with open("Historial.txt", "r") as archivo:
+            lineas = archivo.readlines()
+            if len(lineas) == 0:
+                print("No hay consultas en el historial.")
+                return
+            
+            print("1. Ver últimas 5 consultas")
+            print("2. Buscar consulta por ciudad")
+            opcion = input("Seleccione una opción: ")
+
+            if opcion == "1":
+                # Mostrar las últimas 5 consultas
+                print("\nÚltimas 5 consultas:\n")
+                for linea in lineas[-27:]:#modificación del indice en negativo para traer las últimas ingresadas
+                    print(linea, end="")
+            elif opcion == "2":
+                ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
+                print(f"\nConsultas relacionadas con {ciudad}:\n")
+                encontrado = False
+                for linea in lineas:
+                    if ciudad in linea.lower():
+                        print(linea, end="")
+                        encontrado = True
+                if not encontrado:
+                    print(f"No se encontraron consultas para la ciudad: {ciudad}")
+            else:
+                print("Opción no válida.")
+    
+    except FileNotFoundError:
+        print("El archivo de historial no existe aún. No se han registrado consultas.")
 
 def cambiar_unidades():
     print("Cambiar Unidades")
@@ -193,24 +257,24 @@ def ejecutar_opcion(opcion):
 
 def preguntar_volver_al_menu():
     while True:
-        respuesta = input("¿Desea volver al menú? (s/n): ").strip().lower()
-        if respuesta == 's':
+        respuesta = input("¿Desea volver al menú? (si/no): ").strip().lower()
+        if respuesta == 'si':
             return True  # Volver al menú
-        elif respuesta == 'n':
+        elif respuesta == 'no':
             print("Saliendo del programa...")
             return False  # Finalizar programa
         else:
-            print("Respuesta no válida. Por favor, ingresa 's' para sí o 'n' para no.")
+            print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
 
 def main():
-    while True:
-        mostrar_menu()
+    while True:#funcion main del codigo, donde se hace las llamadas originales
+        mostrar_menu()#llamada a la función menú
         try:
             seleccion = int(input("Selecciona una opción (1-5): "))
             continuar = ejecutar_opcion(seleccion)
             if not continuar:
                 break
-            if not preguntar_volver_al_menu():
+            if not preguntar_volver_al_menu():#llamada la función que al finalizar la ejecución de alguna de las opciones del menú, consulte si volver al mismo o salir
                 break
             time.sleep(2)
         except ValueError:
