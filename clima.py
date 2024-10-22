@@ -88,12 +88,13 @@ def guardar_en_historial(ciudad, pais, informacion):
     consulta += f"Temperatura actual: {informacion['temp_actual']}°C\n"
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
-    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
+    consulta += f"Condiciones climáticas: {informacion['clima']}"
+
     
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
     
-    consulta += "\n-------------------------\n"  # Separador para cada consulta
+    consulta += "\n-------------------------"  # Separador para cada consulta
 
     # Guardar en el archivo
     with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
@@ -214,7 +215,7 @@ def ver_historial():
             if opcion == "1":
                 # Mostrar las últimas 5 consultas
                 print("\nÚltimas 5 consultas:\n")
-                for linea in lineas[-27:]:#modificación del indice en negativo para traer las últimas ingresadas
+                for linea in lineas[-35:]:#modificación del indice en negativo para traer las últimas ingresadas
                     print(linea, end="")
             elif opcion == "2":
                 ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
