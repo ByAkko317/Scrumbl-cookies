@@ -86,7 +86,9 @@ def obtener_clima(nombre_ciudad, nombre_pais):
     api = os.getenv('API')
     unidad_de_medida = "metric"
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
-    
+    historial = open("historial.txt", "a")
+    numero_historial = 1
+
     api_handler = ApiRequestHandler(url)
     result = api_handler.retry_request()
 
@@ -98,15 +100,23 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temp_min = data['main']['temp_min']
         print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura}°C.")
         print(f"Temperatura máxima: {temp_max}°C, Temperatura mínima: {temp_min}°C.")
+        historial.write("Consulta numero ")
+        historial.write("Consulta clima")
+        historial.write(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura}°C.", f"\n Temperatura máxima: {temp_max}°C, Temperatura mínima: {temp_min}°C.")
+        
     else:
         print(result["message"])
+    historial.write(result["message"])
+    historial.close()
 
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
     api = os.getenv('API')
     unidad_de_medida = "metric"
     url_pronostico = f"https://api.openweathermap.org/data/2.5/forecast?q={nombre_ciudad},{nombre_pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
+    historial = open("historial.txt", "a")
     
+
     api_handler = ApiRequestHandler(url_pronostico)
     result = api_handler.retry_request()
     pronosticos_por_dia = {}
@@ -144,11 +154,16 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             # Mostrar el pronóstico con la información del clima y fenómenos
             print(f"{fecha}: {clima} con una temperatura de {temp}°C.")
             print(f"Temperatura máxima: {temp_max:.2f}°C, mínima: {temp_min:.2f}°C.")
+            historial.write(f"{fecha}: {clima} con una temperatura de {temp}°C.")
+            historial.write(f"Temperatura máxima: {temp_max:.2f}°C, mínima: {temp_min:.2f}°C.")
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
+        historial.close()
     else:
         print(result["message"])
+        historial.write(result["message"])
+        historial.close()
 
 def ver_historial():
     print("Ver historial")
