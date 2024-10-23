@@ -156,7 +156,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
 def ver_historial():
     print("Ver historial")
 
-def cambiar_unidades():
+"""def cambiar_unidades():
     print("Cambiar Unidades")
 
     global unidad_de_medida  # Usar la variable global
@@ -189,7 +189,39 @@ def cambiar_unidades():
             print(f"Se mantiene la unidad de medida actual: {unidad_actual}.")
             break  # Salir del bucle sin hacer cambios
         else:
+            print("Opción no válida. Intenta de nuevo.")"""
+
+def cambiar_unidades():
+    print("Cambiar Unidades")
+
+    global unidad_de_medida  # Usar la variable global
+    unidad_actual = 'Celsius' if unidad_de_medida == 'metric' else 'Fahrenheit'# Mensaje que avisa la unidad de medida en la que estas
+    
+    print(f"Unidad de medida actual: {unidad_actual}")
+    print("Selecciona la unidad de medida:")
+    print("1. Métrico (Celsius)")
+    print("2. Imperial (Fahrenheit)")
+
+    while True:
+        seleccion = input("Ingresa tu opción: ")
+        
+        if seleccion == '1':
+            if unidad_de_medida == 'metric':
+                print("Ya estás utilizando la unidad de medida: Celsius.")
+            else:
+                unidad_de_medida = 'metric'  # Cambiar a Celsius
+                print("Unidad de medida cambiada a Celsius.")
+            break  # Salir del bucle, ya que se tomó una decisión
+        elif seleccion == '2':
+            if unidad_de_medida == 'imperial':
+                print("Ya estás utilizando la unidad de medida: Fahrenheit.")
+            else:
+                unidad_de_medida = 'imperial'  # Cambiar a Fahrenheit
+                print("Unidad de medida cambiada a Fahrenheit.")
+            break  # Salir del bucle, ya que se tomó una decisión
+        else:
             print("Opción no válida. Intenta de nuevo.")
+
 
 
 def ejecutar_opcion(opcion):
