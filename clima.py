@@ -120,11 +120,12 @@ def obtener_clima(nombre_ciudad, nombre_pais):
     api = os.getenv('API')
     global unidad_de_medida
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
-    
+
     símbolo_medida = { 
         "metric": "ºC",
         "imperial": "ºF"
     }
+
 
     api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
@@ -153,7 +154,6 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
     else:
         print(result["message"])
-    
 
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
@@ -234,6 +234,7 @@ def ver_historial():
             
             print("1. Ver últimas 5 consultas")
             print("2. Buscar consulta por ciudad")
+            print("3. Borrar historial")  
             opcion = input("Seleccione una opción: ")
 
             if opcion == "1":
@@ -251,11 +252,20 @@ def ver_historial():
                         encontrado = True
                 if not encontrado:
                     print(f"No se encontraron consultas para la ciudad: {ciudad}")
+            elif opcion == "3":
+                # Llamar a la función de borrar historial
+                borrar_historial()
             else:
                 print("Opción no válida.")
     
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
+
+# Función para borrar el contenido del historial
+def borrar_historial():
+    with open("Historial.txt", "w") as archivo:
+        archivo.write("")  # Sobrescribe el archivo con un contenido vacío
+    print("El historial ha sido borrado correctamente.")
 
 
 def cambiar_unidades():
