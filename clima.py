@@ -233,6 +233,7 @@ def ver_historial():
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
 
+
 def cambiar_unidades():
     print("Cambiar Unidades")
 
@@ -255,6 +256,7 @@ def ejecutar_opcion(opcion):
     else:
         print("Opción no válida.")
     return True
+
 
 def preguntar_volver_al_menu():
     while True:
