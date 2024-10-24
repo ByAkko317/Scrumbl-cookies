@@ -47,6 +47,18 @@ class ApiRequestHandler:
             if result["status"] == "success":
                 return result
         return {"status": "error", "message": "Se agotaron los intentos. Intente más tarde."}
+
+# Función para cargar la preferencia de unidad de medida desde un archivo
+def cargar_preferencia_unidades():
+    global unidad_de_medida
+    try:
+        with open("Preferencia.txt", "r") as archivo:
+            unidad_de_medida = archivo.readline().strip()
+            print(f"Se ha cargado la preferencia de unidad: {unidad_de_medida}")
+    except FileNotFoundError:
+        print("No se encontró un archivo de preferencias, se utilizará 'metric' como predeterminado.")
+        unidad_de_medida = "metric"
+
 def mostrar_menu():
     print("Menú de opciones:\n")
     print("1. Consulta de clima según ciudad")
@@ -112,12 +124,8 @@ def obtener_clima(nombre_ciudad, nombre_pais):
     símbolo_medida = { 
         "metric": "ºC",
         "imperial": "ºF"
-     }
+    }
 
-    
-
-
-    
     api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
 
@@ -156,10 +164,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
     símbolo_medida = { 
         "metric": "ºC",
         "imperial": "ºF"
-     }
+    }
 
-    
-    
     api_handler = ApiRequestHandler(url_pronostico)
     result = api_handler.retry_request()
     pronosticos_por_dia = {}
@@ -270,6 +276,9 @@ def cambiar_unidades():
             else:
                 unidad_de_medida = 'metric'  # Cambiar a Celsius
                 print("Unidad de medida cambiada a Celsius.")
+                with open("Preferencia.txt", "w") as archivo:
+                    archivo.write(unidad_de_medida)
+                    archivo.write("\n")
             break  # Salir del bucle, ya que se tomó una decisión
         elif seleccion == '2':
             if unidad_de_medida == 'imperial':
@@ -277,6 +286,9 @@ def cambiar_unidades():
             else:
                 unidad_de_medida = 'imperial'  # Cambiar a Fahrenheit
                 print("Unidad de medida cambiada a Fahrenheit.")
+                with open("Preferencia.txt", "w") as archivo:
+                    archivo.write(unidad_de_medida)
+                    archivo.write("\n")
             break  # Salir del bucle, ya que se tomó una decisión
         else:
             print("Opción no válida. Intenta de nuevo.")
@@ -314,6 +326,7 @@ def preguntar_volver_al_menu():
             print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
 
 def main():
+    cargar_preferencia_unidades()  # Cargar la preferencia de unidad al iniciar
     while True:#funcion main del codigo, donde se hace las llamadas originales
         mostrar_menu()#llamada a la función menú
         try:
