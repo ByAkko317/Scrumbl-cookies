@@ -234,6 +234,7 @@ def ver_historial():
             
             print("1. Ver últimas 5 consultas")
             print("2. Buscar consulta por ciudad")
+            print("3. Borrar historial")  
             opcion = input("Seleccione una opción: ")
 
             if opcion == "1":
@@ -251,11 +252,20 @@ def ver_historial():
                         encontrado = True
                 if not encontrado:
                     print(f"No se encontraron consultas para la ciudad: {ciudad}")
+            elif opcion == "3":
+                # Llamar a la función de borrar historial
+                borrar_historial()
             else:
                 print("Opción no válida.")
     
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
+
+# Función para borrar el contenido del historial
+def borrar_historial():
+    with open("Historial.txt", "w") as archivo:
+        archivo.write("")  # Sobrescribe el archivo con un contenido vacío
+    print("El historial ha sido borrado correctamente.")
 
 
 def cambiar_unidades():
