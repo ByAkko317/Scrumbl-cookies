@@ -4,6 +4,8 @@ import os
 import requests
 import time
 
+unidad_de_medida = "metric"
+
 class ApiRequestHandler:
     def __init__(self, api_url):
         self.api_url = api_url
@@ -45,6 +47,18 @@ class ApiRequestHandler:
             if result["status"] == "success":
                 return result
         return {"status": "error", "message": "Se agotaron los intentos. Intente más tarde."}
+
+# Función para cargar la preferencia de unidad de medida desde un archivo
+def cargar_preferencia_unidades():
+    global unidad_de_medida
+    try:
+        with open("Preferencia.txt", "r") as archivo:
+            unidad_de_medida = archivo.readline().strip()
+            print(f"Se ha cargado la preferencia de unidad: {unidad_de_medida}")
+    except FileNotFoundError:
+        print("No se encontró un archivo de preferencias, se utilizará 'metric' como predeterminado.")
+        unidad_de_medida = "metric"
+
 def mostrar_menu():
     print("Menú de opciones:\n")
     print("1. Consulta de clima según ciudad")
@@ -89,6 +103,7 @@ def guardar_en_historial(ciudad, pais, informacion):
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
     consulta += f"Condiciones climáticas: {informacion['clima']}"
+
     
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
@@ -103,8 +118,15 @@ def guardar_en_historial(ciudad, pais, informacion):
 def obtener_clima(nombre_ciudad, nombre_pais):
     load_dotenv()#obtención de datos de .env
     api = os.getenv('API')
-    unidad_de_medida = "metric"
+    global unidad_de_medida
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
+
+    símbolo_medida = { 
+        "metric": "ºC",
+        "imperial": "ºF"
+    }
+
+
     api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
 
@@ -114,8 +136,8 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
-        print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura}°C.")
-        print(f"Temperatura máxima: {temp_max}°C, Temperatura mínima: {temp_min}°C.")
+        print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
+        print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
         # Preparar información para guardar en el historial
         informacion = {
             "temp_actual": temperatura,
@@ -136,10 +158,13 @@ def obtener_clima(nombre_ciudad, nombre_pais):
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
     api = os.getenv('API')
-    unidad_de_medida = "metric"
+    global unidad_de_medida
     url_pronostico = f"https://api.openweathermap.org/data/2.5/forecast?q={nombre_ciudad},{nombre_pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
-    historial = open("historial.txt", "a")
-    
+
+    símbolo_medida = { 
+        "metric": "ºC",
+        "imperial": "ºF"
+    }
 
     api_handler = ApiRequestHandler(url_pronostico)
     result = api_handler.retry_request()
@@ -176,8 +201,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                 alerta = f"¡Atención! Se esperan {fenomenos.lower()}."
 
             # Mostrar el pronóstico con la información del clima y fenómenos
-            print(f"{fecha}: {clima} con una temperatura de {temperatura}°C.")
-            print(f"Temperatura máxima: {temp_max:.2f}°C, mínima: {temp_min:.2f}°C.")
+            print(f"{fecha}: {clima} con una temperatura de {temperatura}{símbolo_medida[unidad_de_medida]}.")
+            print(f"Temperatura máxima: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}, mínima: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}.")
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
@@ -232,8 +257,42 @@ def ver_historial():
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
 
+
 def cambiar_unidades():
     print("Cambiar Unidades")
+    global unidad_de_medida  # Usar la variable global
+    unidad_actual = 'Celsius' if unidad_de_medida == 'metric' else 'Imperial'# Mensaje que avisa la unidad de medida en la que estas
+
+    print(f"Unidad de medida actual: {unidad_actual}")
+    print("Selecciona la unidad de medida:")
+    print("1. Métrico (Celsius)")
+    print("2. Imperial (Fahrenheit)")
+    while True:
+        seleccion = input("Ingresa tu opción: ")
+        
+        if seleccion == '1':
+            if unidad_de_medida == 'metric':
+                print("Ya estás utilizando la unidad de medida: Celsius.")
+            else:
+                unidad_de_medida = 'metric'  # Cambiar a Celsius
+                print("Unidad de medida cambiada a Celsius.")
+                with open("Preferencia.txt", "w") as archivo:
+                    archivo.write(unidad_de_medida)
+                    archivo.write("\n")
+            break  # Salir del bucle, ya que se tomó una decisión
+        elif seleccion == '2':
+            if unidad_de_medida == 'imperial':
+                print("Ya estás utilizando la unidad de medida: Fahrenheit.")
+            else:
+                unidad_de_medida = 'imperial'  # Cambiar a Fahrenheit
+                print("Unidad de medida cambiada a Fahrenheit.")
+                with open("Preferencia.txt", "w") as archivo:
+                    archivo.write(unidad_de_medida)
+                    archivo.write("\n")
+            break  # Salir del bucle, ya que se tomó una decisión
+        else:
+            print("Opción no válida. Intenta de nuevo.")
+
 
 def ejecutar_opcion(opcion):
     if opcion == 1:
@@ -267,6 +326,7 @@ def preguntar_volver_al_menu():
             print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
 
 def main():
+    cargar_preferencia_unidades()  # Cargar la preferencia de unidad al iniciar
     while True:#funcion main del codigo, donde se hace las llamadas originales
         mostrar_menu()#llamada a la función menú
         try:
