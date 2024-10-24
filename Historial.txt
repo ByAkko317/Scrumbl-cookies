@@ -1,0 +1,35 @@
+Fecha y hora: 2024-10-21 23:07:36
+Ciudad: mendoza, argentina
+Temperatura actual: 15.64�C
+Temperatura m�xima: 15.64�C
+Temperatura m�nima: 15.64�C
+Condiciones clim�ticas: lluvia ligera
+-------------------------
+Fecha y hora: 2024-10-21 23:07:36
+Ciudad: mendoza, argentina
+Temperatura actual: 14.78�C
+Temperatura m�xima: 14.78�C
+Temperatura m�nima: 14.78�C
+Condiciones clim�ticas: lluvia ligera
+-------------------------
+Fecha y hora: 2024-10-21 23:07:36
+Ciudad: mendoza, argentina
+Temperatura actual: 18.97�C
+Temperatura m�xima: 18.97�C
+Temperatura m�nima: 18.97�C
+Condiciones clim�ticas: algo de nubes
+-------------------------
+Fecha y hora: 2024-10-21 23:07:36
+Ciudad: mendoza, argentina
+Temperatura actual: 12.11�C
+Temperatura m�xima: 12.11�C
+Temperatura m�nima: 12.11�C
+Condiciones clim�ticas: cielo claro
+-------------------------
+Fecha y hora: 2024-10-21 23:07:36
+Ciudad: mendoza, argentina
+Temperatura actual: 15.97�C
+Temperatura m�xima: 15.97�C
+Temperatura m�nima: 15.97�C
+Condiciones clim�ticas: cielo claro
+-------------------------
