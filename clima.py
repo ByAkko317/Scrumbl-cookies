@@ -237,7 +237,6 @@ def ver_historial():
             print("3. Borrar historial")  
             opcion = input("Seleccione una opción: ")
 
-
             if opcion == "1":
                 # Mostrar las últimas 5 consultas
                 print("\nÚltimas 5 consultas:\n")
@@ -261,6 +260,7 @@ def ver_historial():
     
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
+
 
 # Función para borrar el contenido del historial
 def borrar_historial():
