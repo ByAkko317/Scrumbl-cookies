@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Consultar Clima</title>
+</head>
+<body>
+    <h1>Consultar el clima de una ciudad</h1>
+    <input type="text" id="ciudad" placeholder="Nombre de la ciudad">
+    <input type="text" id="pais" placeholder="Nombre del país">
+    <button onclick="obtener_clima()">Consultar Ciudad</button><br/>
+    
+    <script>
+        function obtener_clima() {
+            const nombre_ciudad = document.getElementById('ciudad').value;
+            const nombre_pais = document.getElementById('pais').value;
+
+            fetch('/obtener_clima', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ nombre_ciudad: nombre_ciudad, nombre_pais: nombre_pais })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    alert(data.resultado);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

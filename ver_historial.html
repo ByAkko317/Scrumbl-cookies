@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ver Historial</title>
+</head>
+<body>
+    <h1>Historial de Consultas</h1>    
+    <div id="historial"></div>
+    
+    <script>
+        function ver_historial() {
+            fetch('/ver_historial')
+            .then(response => response.json())
+            .then(data => {
+                const historialDiv = document.getElementById('historial');
+                historialDiv.innerHTML = "";
+                
+                if (data.mensaje) {
+                    historialDiv.innerHTML = `<p>${data.mensaje}</p>`;
+                } else {
+                    historialDiv.innerHTML = `<p>${data.opciones["1"]}</p>`;
+                    const ultimasConsultas = data.historial.slice(-5).join('<br/>');
+                    historialDiv.innerHTML += `<p>${ultimasConsultas}</p>`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
