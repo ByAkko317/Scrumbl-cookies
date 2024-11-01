@@ -169,9 +169,14 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
     api_handler = ApiRequestHandler(url_pronostico)
     result = api_handler.retry_request()
     pronosticos_por_dia = {}
+    temperaturas = []
+    climas = []
+    fenomenos = []
+
     if result["status"] == "success":
         data = result["data"]
         print(f"Pronóstico de 5 días para {nombre_ciudad}, {nombre_pais}:\n")
+
         # Filtrar registros de las 12:00 de cada día y calcular la media de temp. máxima y mínima
         for item in data['list']:
             fecha = item['dt_txt'].split(" ")[0]  # Obtener solo la fecha
@@ -187,7 +192,12 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                     "fenomenos": item['weather'][0]['main']  # Fenómenos meteorológicos
                 }
 
-        # Mostrar el pronóstico para los próximos 5 días con fenómenos meteorológicos
+                # Agregar datos a listas para análisis posterior
+                temperaturas.append(item['main']['temp'])
+                climas.append(item['weather'][0]['description'])
+                fenomenos.append(item['weather'][0]['main'])
+
+        # Mostrar el pronóstico para los próximos 5 días
         for fecha, item in pronosticos_por_dia.items():
             clima = item['clima']
             temperatura = item['temp']
@@ -195,7 +205,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             temp_min = item['temp_min']
             fenomenos = item['fenomenos']
 
-            # Identificar posibles fenómenos meteorológicos peligrosos
+            # Identificar fenómenos meteorológicos peligrosos
             alerta = ""
             if fenomenos in ['Rain', 'Thunderstorm', 'Snow']:
                 alerta = f"¡Atención! Se esperan {fenomenos.lower()}."
@@ -206,6 +216,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
+
             informacion = {
                 "temp_actual": temperatura,
                 "temp_max": temp_max,
@@ -219,9 +230,25 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
 
             # Guardar en el historial
             guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
+
+        # Nueva funcionalidad: Resumen de pronósticos
+        if temperaturas:
+            temp_min = min(pronosticos_por_dia[fecha]['temp_min'] for fecha in pronosticos_por_dia)
+            temp_max = max(pronosticos_por_dia[fecha]['temp_max'] for fecha in pronosticos_por_dia)
+            promedio_temp = sum(temperaturas) / len(temperaturas)
+
+            clima_mas_frecuente = max(set(climas), key=climas.count)
+            fenomeno_mas_frecuente = max(set(fenomenos), key=fenomenos.count)
+
+            print("\nResumen de pronósticos:")
+            print(f"Temperatura mínima en 5 días: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}")
+            print(f"Temperatura máxima en 5 días: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}")
+            print(f"Temperatura promedio en 5 días: {promedio_temp:.2f}{símbolo_medida[unidad_de_medida]}")
+            print(f"Clima más frecuente: {clima_mas_frecuente}")
+            print(f"Fenómeno más frecuente: {fenomeno_mas_frecuente}")
+
     else:
         print(result["message"])
-
 
 def ver_historial():
     try:
