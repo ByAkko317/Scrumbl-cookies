@@ -1,0 +1,159 @@
+Fecha y hora: 2024-11-01 09:24:56
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.74°C
+Temperatura máxima: 21.74°C
+Temperatura mínima: 21.74°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 09:30:30
+Ciudad: Mendoza, Argentinas
+Temperatura actual: 21.74°C
+Temperatura máxima: 21.74°C
+Temperatura mínima: 21.74°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 09:34:17
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.74°C
+Temperatura máxima: 21.74°C
+Temperatura mínima: 21.74°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 09:41:56
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.74°C
+Temperatura máxima: 21.74°C
+Temperatura mínima: 21.74°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 09:42:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.74°C
+Temperatura máxima: 21.74°C
+Temperatura mínima: 21.74°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 10:00:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 17.89°C
+Temperatura máxima: 17.89°C
+Temperatura mínima: 17.89°C
+Condiciones climáticas: muy nuboso
+-------------------------
+Fecha y hora: 2024-11-01 10:00:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 18.68°C
+Temperatura máxima: 18.68°C
+Temperatura mínima: 18.68°C
+Condiciones climáticas: algo de nubes
+-------------------------
+Fecha y hora: 2024-11-01 10:00:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 20.99°C
+Temperatura máxima: 20.99°C
+Temperatura mínima: 20.99°C
+Condiciones climáticas: lluvia ligera
+-------------------------
+Fecha y hora: 2024-11-01 10:00:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 17.77°C
+Temperatura máxima: 17.77°C
+Temperatura mínima: 17.77°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 10:00:50
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.94°C
+Temperatura máxima: 21.94°C
+Temperatura mínima: 21.94°C
+Condiciones climáticas: cielo claro
+-------------------------
+Fecha y hora: 2024-11-01 10:05:17
+Ciudad: San Juan, Argentina
+Temperatura actual: 20.1°C
+Temperatura máxima: 20.1°C
+Temperatura mínima: 20.1°C
+Condiciones climáticas: nubes dispersas
+-------------------------
+Fecha y hora: 2024-11-01 10:05:17
+Ciudad: San Juan, Argentina
+Temperatura actual: 21.67°C
+Temperatura máxima: 21.67°C
+Temperatura mínima: 21.67°C
+Condiciones climáticas: algo de nubes
+-------------------------
+Fecha y hora: 2024-11-01 10:05:17
+Ciudad: San Juan, Argentina
+Temperatura actual: 22.66°C
+Temperatura máxima: 22.66°C
+Temperatura mínima: 22.66°C
+Condiciones climáticas: algo de nubes
+-------------------------
+Fecha y hora: 2024-11-01 10:05:17
+Ciudad: San Juan, Argentina
+Temperatura actual: 18.79°C
+Temperatura máxima: 18.79°C
+Temperatura mínima: 18.79°C
+Condiciones climáticas: muy nuboso
+-------------------------
+Fecha y hora: 2024-11-01 10:05:17
+Ciudad: San Juan, Argentina
+Temperatura actual: 23.99°C
+Temperatura máxima: 23.99°C
+Temperatura mínima: 23.99°C
+Condiciones climáticas: nubes
+-------------------------
+Fecha y hora: 2024-11-01 10:21:05
+Ciudad: Mendoza, Argentina
+Temperatura actual: 25.74°C
+Temperatura máxima: 25.74°C
+Temperatura mínima: 25.74°C
+Condiciones climáticas: cielo claro
+Humedad: 53%
+
+-------------------------
+Fecha y hora: 2024-11-01 10:21:26
+Ciudad: Mendoza, Argentina
+Temperatura actual: 17.89°C
+Temperatura máxima: 17.89°C
+Temperatura mínima: 17.89°C
+Condiciones climáticas: muy nuboso
+Humedad: 32%
+
+-------------------------
+Fecha y hora: 2024-11-01 10:21:26
+Ciudad: Mendoza, Argentina
+Temperatura actual: 18.68°C
+Temperatura máxima: 18.68°C
+Temperatura mínima: 18.68°C
+Condiciones climáticas: algo de nubes
+Humedad: 38%
+
+-------------------------
+Fecha y hora: 2024-11-01 10:21:26
+Ciudad: Mendoza, Argentina
+Temperatura actual: 20.99°C
+Temperatura máxima: 20.99°C
+Temperatura mínima: 20.99°C
+Condiciones climáticas: lluvia ligera
+Humedad: 55%
+
+-------------------------
+Fecha y hora: 2024-11-01 10:21:26
+Ciudad: Mendoza, Argentina
+Temperatura actual: 17.77°C
+Temperatura máxima: 17.77°C
+Temperatura mínima: 17.77°C
+Condiciones climáticas: cielo claro
+Humedad: 39%
+
+-------------------------
+Fecha y hora: 2024-11-01 10:21:26
+Ciudad: Mendoza, Argentina
+Temperatura actual: 21.94°C
+Temperatura máxima: 21.94°C
+Temperatura mínima: 21.94°C
+Condiciones climáticas: cielo claro
+Humedad: 62%
+
+-------------------------

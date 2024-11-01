@@ -102,7 +102,8 @@ def guardar_en_historial(ciudad, pais, informacion):
     consulta += f"Temperatura actual: {informacion['temp_actual']}°C\n"
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
-    consulta += f"Condiciones climáticas: {informacion['clima']}"
+    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
+    consulta += f"Humedad: {informacion['humedad']}%\n"
 
     
     if 'alerta' in informacion:
@@ -127,6 +128,7 @@ def obtener_clima(nombre_ciudad, nombre_pais):
     }
 
 
+
     api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
 
@@ -136,14 +138,17 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
+        humedad = data['main']['humidity'] 
         print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
         print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
+        print(f"Humedad: {humedad}%")
         # Preparar información para guardar en el historial
         informacion = {
             "temp_actual": temperatura,
             "temp_max": temp_max,
             "temp_min": temp_min,
-            "clima": clima
+            "clima": clima,
+            "humedad": humedad
         }
 
         # Verificar si hay alertas meteorológicas en los datos recibidos
@@ -154,6 +159,8 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
     else:
         print(result["message"])
+
+       
 
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
@@ -184,6 +191,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                     "temp": item['main']['temp'],
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
+                    "humedad": item['main']['humidity'],
                     "fenomenos": item['weather'][0]['main']  # Fenómenos meteorológicos
                 }
 
@@ -193,6 +201,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             temperatura = item['temp']
             temp_max = item['temp_max']
             temp_min = item['temp_min']
+            humedad = item['humedad']  
             fenomenos = item['fenomenos']
 
             # Identificar posibles fenómenos meteorológicos peligrosos
@@ -203,6 +212,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             # Mostrar el pronóstico con la información del clima y fenómenos
             print(f"{fecha}: {clima} con una temperatura de {temperatura}{símbolo_medida[unidad_de_medida]}.")
             print(f"Temperatura máxima: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}, mínima: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}.")
+            print(f"Humedad: {humedad}%") 
+            
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
@@ -210,7 +221,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                 "temp_actual": temperatura,
                 "temp_max": temp_max,
                 "temp_min": temp_min,
-                "clima": clima
+                "clima": clima,
+                "humedad": humedad,
             }
 
             # Verificar si hay alertas meteorológicas en los datos recibidos
