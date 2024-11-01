@@ -1,0 +1,14 @@
+Fecha y hora: 2024-11-01 13:06:45
+Ciudad: Salta, Argentina
+Temperatura actual: 29.6°C
+Temperatura máxima: 29.6°C
+Temperatura mínima: 29.6°C
+Condiciones climáticas: nubes
+-------------------------
+Fecha y hora: 2024-11-01 13:13:08
+Ciudad: Mendoza, Argentina
+Temperatura actual: 31.03°C
+Temperatura máxima: 31.03°C
+Temperatura mínima: 31.03°C
+Condiciones climáticas: cielo claro
+-------------------------

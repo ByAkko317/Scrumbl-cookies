@@ -95,38 +95,39 @@ def validar_pais():
             continue
         
         return pais
-# Función para guardar las consultas en el archivo "Historial.txt"
+
+def leer_historial():
+    if not os.path.exists("Historial.txt"):
+        return []
+    with open("Historial.txt", "r") as archivo:
+        contenido = archivo.read()
+    consultas = contenido.split("-------------------------\n")
+    if consultas[-1].strip() == "":
+        consultas.pop()
+    return consultas
+
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    
-    consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
+    consultas = leer_historial()
+
+    num_consultas = len(consultas) + 1  # Contar el número de consultas existentes
+    consulta = f"Consulta #{num_consultas}\nFecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
     consulta += f"Temperatura actual: {informacion['temp_actual']}°C\n"
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
-    consulta += f"Condiciones climáticas: {informacion['clima']}"
-
-    
+    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
-    
-    consulta += "\n-------------------------"  # Separador para cada consulta
+    consulta += "-------------------------\n"
 
-    # Guardar en el archivo
-    with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
+    with open("Historial.txt", "a") as archivo:
         archivo.write(consulta)
-        archivo.write("\n")
 
 def obtener_clima(nombre_ciudad, nombre_pais):
     load_dotenv()#obtención de datos de .env
     api = os.getenv('API')
     global unidad_de_medida
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
-
-    símbolo_medida = { 
-        "metric": "ºC",
-        "imperial": "ºF"
-    }
-
 
     api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
     result = api_handler.retry_request()
@@ -137,14 +138,21 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
-        print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
+        viento_velocidad = data['wind']['speed']  # Extraer la velocidad del viento
+        viento_direccion = data['wind'].get('deg', 'No disponible')  # Extraer dirección si está disponible
+        # Mensaje de notificación con los datos pertinentes
+        print(f"\nEl clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
         print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
+        print(f"Velocidad del viento: {viento_velocidad} m/s, Dirección: {viento_direccion}°.")
+
         # Preparar información para guardar en el historial
         informacion = {
             "temp_actual": temperatura,
             "temp_max": temp_max,
             "temp_min": temp_min,
-            "clima": clima
+            "clima": clima,
+            "viento_vel": viento_velocidad,
+            "viento_dir": viento_direccion
         }
 
         # Verificar si hay alertas meteorológicas en los datos recibidos
@@ -155,7 +163,7 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
     else:
         print(result["message"])
-
+        
 def obtener_pronostico(nombre_ciudad, nombre_pais):
     load_dotenv()
     api = os.getenv('API')
@@ -226,23 +234,48 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
 
 def ver_historial():
     try:
-        # Abrir el archivo de historial en modo lectura
         with open("Historial.txt", "r") as archivo:
             lineas = archivo.readlines()
             if len(lineas) == 0:
                 print("No hay consultas en el historial.")
                 return
-            
+
             print("1. Ver últimas 5 consultas")
             print("2. Buscar consulta por ciudad")
-            print("3. Borrar historial")  
-            opcion = input("Seleccione una opción: ")
+            print("3. Borrar historial")
 
+            opcion = input("Seleccione una opción: ")
             if opcion == "1":
-                # Mostrar las últimas 5 consultas
                 print("\nÚltimas 5 consultas:\n")
-                for linea in lineas[-35:]:#modificación del indice en negativo para traer las últimas ingresadas
-                    print(linea, end="")
+                consultas = ''.join(lineas[-35:])  # Ajusta el índice para obtener las últimas 5 consultas (aproximadamente)
+                print(consultas)
+
+                if len(consultas) > 1:
+                    consulta = input("\n¿Desea consultar el clima actual de alguna de estas ciudades? (s/n): ")
+                    if consulta.lower() == "s":
+                        numero = int(input("Elija el número de la consulta (1-5): "))
+                        consulta_lines = consultas.split("\n-------------------------\n")
+                        if 1 <= numero <= len(consulta_lines):
+                            seleccionada = consulta_lines[numero - 1]
+                            ciudad_linea = [line for line in seleccionada.split('\n') if "Ciudad:" in line][0]
+                            ciudad_pais = ciudad_linea.split(": ")[1].split(", ")
+                            ciudad, pais = ciudad_pais[0], ciudad_pais[1]
+                            nueva_informacion = obtener_clima(ciudad, pais)
+                            if nueva_informacion:
+                                nueva_consulta = f"Fecha y hora: {time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())}\nCiudad: {ciudad}, {pais}\n"
+                                nueva_consulta += f"Temperatura actual: {nueva_informacion['temp_actual']}°C\n"
+                                nueva_consulta += f"Temperatura máxima: {nueva_informacion['temp_max']}°C\n"
+                                nueva_consulta += f"Temperatura mínima: {nueva_informacion['temp_min']}°C\n"
+                                nueva_consulta += f"Condiciones climáticas: {nueva_informacion['clima']}\n"
+                                if 'alerta' in nueva_informacion:
+                                    nueva_consulta += f"Alerta meteorológica: {nueva_informacion['alerta']}\n"
+                                print(nueva_consulta)
+                            else:
+                                print("No se pudo obtener la información del clima.")
+                        else:
+                            print("Número de consulta inválido.")
+                    else:
+                        print("No se realizará ninguna consulta adicional.")
             elif opcion == "2":
                 ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
                 print(f"\nConsultas relacionadas con {ciudad}:\n")
@@ -254,14 +287,11 @@ def ver_historial():
                 if not encontrado:
                     print(f"No se encontraron consultas para la ciudad: {ciudad}")
             elif opcion == "3":
-                # Llamar a la función de borrar historial
                 borrar_historial()
             else:
                 print("Opción no válida.")
-    
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
-
 # Función para borrar el contenido del historial
 def borrar_historial():
     with open("Historial.txt", "w") as archivo:
