@@ -51,7 +51,8 @@ def mostrar_menu():
     print("2. Consulta de pronóstico según ciudad")
     print("3. Ver historial")
     print("4. Cambiar unidades")
-    print("5. Salir\n")
+    print("5. Resumen")
+    print("6. Salir\n")
 
 def validar_ciudad():
     while True:
@@ -170,11 +171,61 @@ def ejecutar_opcion(opcion):
     elif opcion == 4:
         cambiar_unidades()
     elif opcion == 5:
+        nombre_ciudad = validar_ciudad()
+        nombre_pais = validar_pais()
+        resumen(nombre_ciudad, nombre_pais)
+    elif opcion == 6:
         print("Saliendo del programa...")
         return False
     else:
         print("Opción no válida.")
     return True
+
+import os
+from dotenv import load_dotenv
+
+def resumen(nombre_ciudad, nombre_pais):
+    load_dotenv()
+    api = os.getenv('API')
+    unidad_de_medida = "metric"
+    url_pronostico = f"https://api.openweathermap.org/data/2.5/forecast?q={nombre_ciudad},{nombre_pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
+    
+    api_handler = ApiRequestHandler(url_pronostico)
+    result = api_handler.retry_request()
+    
+    if result["status"] == "success":
+        data = result["data"]
+        suma_temp_max = 0
+        suma_temp_min = 0
+        suma_humedad = 0
+        suma_direccion_viento = 0
+        dias_count = 0
+        
+        # Filtrar registros de las 12:00 de cada día y sumar las temperaturas, humedad y dirección del viento
+        for item in data['list']:
+            fecha = item['dt_txt'].split(" ")[0]  # Obtener solo la fecha
+            hora = item['dt_txt'].split(" ")[1]   # Obtener la hora
+            
+            # Elegir el pronóstico de las 12:00 de cada día
+            if hora == "12:00:00":
+                suma_temp_max += item['main']['temp_max']
+                suma_temp_min += item['main']['temp_min']
+                suma_humedad += item['main']['humidity']
+                suma_direccion_viento += item['wind']['deg']
+                dias_count += 1
+
+        if dias_count > 0:
+            promedio_temp_max = suma_temp_max / dias_count
+            promedio_temp_min = suma_temp_min / dias_count
+            promedio_humedad = suma_humedad / dias_count
+            promedio_direccion_viento = suma_direccion_viento / dias_count
+            
+            print(f"Promedio de temperatura máxima en los próximos 5 días: {promedio_temp_max:.2f} °C")
+            print(f"Promedio de temperatura mínima en los próximos 5 días: {promedio_temp_min:.2f} °C")
+            print(f"Promedio de humedad en los próximos 5 días: {promedio_humedad:.2f}%")
+            print(f"Promedio de dirección del viento en los próximos 5 días: {promedio_direccion_viento:.2f}°")
+        else:
+            print("No hay datos disponibles para calcular el promedio.")
 
 def preguntar_volver_al_menu():
     while True:
@@ -191,7 +242,7 @@ def main():
     while True:
         mostrar_menu()
         try:
-            seleccion = int(input("Selecciona una opción (1-5): "))
+            seleccion = int(input("Selecciona una opción (1-6): "))
             continuar = ejecutar_opcion(seleccion)
             if not continuar:
                 break
