@@ -5,6 +5,10 @@ import requests
 import time
 
 unidad_de_medida = "metric"
+símbolo_medida = { 
+    "metric": "ºC",
+    "imperial": "ºF"
+}
 
 class ApiRequestHandler:
     def __init__(self, api_url):
@@ -60,12 +64,12 @@ def cargar_preferencia_unidades():
         unidad_de_medida = "metric"
 
 def mostrar_menu():
-    print("Menú de opciones:\n")
+    print("\nMenú de opciones:\n")
     print("1. Consulta de clima según ciudad")
     print("2. Consulta de pronóstico según ciudad")
     print("3. Ver historial")
     print("4. Cambiar unidades")
-    print("5. Salir\n")
+    print("5. Salir")
 
 def validar_ciudad():
     while True:
@@ -99,16 +103,19 @@ def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
-    consulta += f"Temperatura actual: {informacion['temp_actual']}°C\n"
-    consulta += f"Temperatura máxima: {informacion['temp_max']}°C\n"
+    consulta += f"Temperatura actual: {informacion['temp_actual']}°C, "
+    consulta += f"Temperatura máxima: {informacion['temp_max']}°C y "
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
+    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
+    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s, "
+    consulta += f"Dirección del viento: {informacion['viento_dir']}° "
+
     consulta += f"Condiciones climáticas: {informacion['clima']}\n"
     consulta += f"Humedad: {informacion['humedad']}%\n"
 
     
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
-    
     consulta += "\n-------------------------"  # Separador para cada consulta
 
     # Guardar en el archivo
@@ -139,16 +146,23 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
         humedad = data['main']['humidity'] 
-        print(f"El clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
+        viento_velocidad = data['wind']['speed']  # Extraer la velocidad del viento
+        viento_direccion = data['wind'].get('deg', 'No disponible')  # Extraer dirección si está disponible
+        # Mensaje de notificación con los datos pertinentes
+        print(f"\nEl clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
         print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
         print(f"Humedad: {humedad}%")
+        print(f"Velocidad del viento: {viento_velocidad} m/s, Dirección: {viento_direccion}°.")
+
         # Preparar información para guardar en el historial
         informacion = {
             "temp_actual": temperatura,
             "temp_max": temp_max,
             "temp_min": temp_min,
             "clima": clima,
-            "humedad": humedad
+            "humedad": humedad,
+            "viento_vel": viento_velocidad,
+            "viento_dir": viento_direccion
         }
 
         # Verificar si hay alertas meteorológicas en los datos recibidos
@@ -168,13 +182,9 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
     global unidad_de_medida
     url_pronostico = f"https://api.openweathermap.org/data/2.5/forecast?q={nombre_ciudad},{nombre_pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
 
-    símbolo_medida = { 
-        "metric": "ºC",
-        "imperial": "ºF"
-    }
-
     api_handler = ApiRequestHandler(url_pronostico)
     result = api_handler.retry_request()
+    
     pronosticos_por_dia = {}
     if result["status"] == "success":
         data = result["data"]
@@ -183,7 +193,6 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
         for item in data['list']:
             fecha = item['dt_txt'].split(" ")[0]  # Obtener solo la fecha
             hora = item['dt_txt'].split(" ")[1]   # Obtener la hora
-
             # Elegir el pronóstico de las 12:00 de cada día
             if hora == "12:00:00":
                 pronosticos_por_dia[fecha] = {
@@ -192,7 +201,9 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
                     "humedad": item['main']['humidity'],
-                    "fenomenos": item['weather'][0]['main']  # Fenómenos meteorológicos
+                    "fenomenos": item['weather'][0]['main'], # Fenómenos meteorológicos
+                    "viento_velocidad" : item['wind']['speed'],  # Velocidad del viento
+                    "viento_direccion" : item['wind'].get('deg', 'No disponible')  # Dirección del viento si está disponible
                 }
 
         # Mostrar el pronóstico para los próximos 5 días con fenómenos meteorológicos
@@ -203,6 +214,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             temp_min = item['temp_min']
             humedad = item['humedad']  
             fenomenos = item['fenomenos']
+            wind_vel= item['viento_velocidad']
+            wind_dir=item['viento_direccion']
 
             # Identificar posibles fenómenos meteorológicos peligrosos
             alerta = ""
@@ -214,6 +227,8 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             print(f"Temperatura máxima: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}, mínima: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}.")
             print(f"Humedad: {humedad}%") 
             
+            print(f"Velocidad del viento: {wind_vel} m/s, Dirección: {wind_dir}°.\n")
+
             if alerta:
                 print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
             print()  # Espacio en blanco entre los días
@@ -222,7 +237,9 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                 "temp_max": temp_max,
                 "temp_min": temp_min,
                 "clima": clima,
-                "humedad": humedad,
+                "humedad": humedad,,
+                "viento_vel": wind_vel,
+                "viento_dir": wind_dir
             }
 
             # Verificar si hay alertas meteorológicas en los datos recibidos
@@ -236,6 +253,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
 
 
 def ver_historial():
+    print("\n"+("="*20)+" Ver Historial "+("="*20)+"\n")
     try:
         # Abrir el archivo de historial en modo lectura
         with open("Historial.txt", "r") as archivo:
@@ -254,6 +272,8 @@ def ver_historial():
                 print("\nÚltimas 5 consultas:\n")
                 for linea in lineas[-35:]:#modificación del indice en negativo para traer las últimas ingresadas
                     print(linea, end="")
+                    time.sleep(0.5)
+                time.sleep(2)
             elif opcion == "2":
                 ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
                 print(f"\nConsultas relacionadas con {ciudad}:\n")
@@ -282,14 +302,15 @@ def borrar_historial():
 
 
 def cambiar_unidades():
-    print("Cambiar Unidades")
+    print("\n"+("="*20)+" Cambiar unidades "+("="*20)+"\n")
     global unidad_de_medida  # Usar la variable global
     unidad_actual = 'Celsius' if unidad_de_medida == 'metric' else 'Imperial'# Mensaje que avisa la unidad de medida en la que estas
 
     print(f"Unidad de medida actual: {unidad_actual}")
     print("Selecciona la unidad de medida:")
     print("1. Métrico (Celsius)")
-    print("2. Imperial (Fahrenheit)")
+    print("2. Imperial (Fahrenheit)\n")
+    print("si deseas volver al menú principal oprime la tecla 3")
     while True:
         seleccion = input("Ingresa tu opción: ")
         
@@ -319,16 +340,22 @@ def cambiar_unidades():
 
 def ejecutar_opcion(opcion):
     if opcion == 1:
+        time.sleep(2)
+        print("\n"+("="*20)+" Obtener clima "+("="*20)+"\n")
         nombre_ciudad = validar_ciudad()
         nombre_pais = validar_pais()
         obtener_clima(nombre_ciudad, nombre_pais)
     elif opcion == 2:
+        time.sleep(2)
+        print("\n"+("="*20)+" Obtener pronóstico "+("="*20)+"\n")
         nombre_ciudad = validar_ciudad()
         nombre_pais = validar_pais()
         obtener_pronostico(nombre_ciudad, nombre_pais)
     elif opcion == 3:
+        time.sleep(2)
         ver_historial()
     elif opcion == 4:
+        time.sleep(2)
         cambiar_unidades()
     elif opcion == 5:
         print("Saliendo del programa...")
@@ -351,9 +378,12 @@ def preguntar_volver_al_menu():
 
 def main():
     cargar_preferencia_unidades()  # Cargar la preferencia de unidad al iniciar
+    print("\n"+("="*20)+" BIENVENIDO A NUESTRA APLICACIÓN DEL CLIMA "+("="*20)+"\n")
+    time.sleep(2)
     while True:#funcion main del codigo, donde se hace las llamadas originales
         mostrar_menu()#llamada a la función menú
         try:
+            time.sleep(1)
             seleccion = int(input("Selecciona una opción (1-5): "))
             continuar = ejecutar_opcion(seleccion)
             if not continuar:
