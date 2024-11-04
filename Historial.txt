@@ -1,0 +1,80 @@
+Fecha y hora: 2024-11-04 11:20:41
+Ciudad: Mendoza, Argentina
+Temperatura actual: 71.13°C,Temperatura máxima: 71.13°CTemperatura mínima: 71.13°CCondiciones climáticas: algo de nubes
+Velocidad del viento: 17.27 m/s, Dirección del viento: 160°Humedad: 30%
+------------------------
+Fecha y hora: 2024-11-04 11:21:11
+Ciudad: Mendoza, Argentina
+Temperatura actual: 66.27°C,Temperatura máxima: 66.27°CTemperatura mínima: 66.27°CCondiciones climáticas: nubes dispersas
+Velocidad del viento: 6.53 m/s, Dirección del viento: 142°Humedad: 45%
+------------------------
+Fecha y hora: 2024-11-04 11:21:11
+Ciudad: Mendoza, Argentina
+Temperatura actual: 71.82°C,Temperatura máxima: 71.82°CTemperatura mínima: 71.82°CCondiciones climáticas: cielo claro
+Velocidad del viento: 13.62 m/s, Dirección del viento: 174°Humedad: 50%
+------------------------
+Fecha y hora: 2024-11-04 11:21:11
+Ciudad: Mendoza, Argentina
+Temperatura actual: 67.42°C,Temperatura máxima: 67.42°CTemperatura mínima: 67.42°CCondiciones climáticas: muy nuboso
+Velocidad del viento: 8.03 m/s, Dirección del viento: 160°Humedad: 47%
+------------------------
+Fecha y hora: 2024-11-04 11:21:11
+Ciudad: Mendoza, Argentina
+Temperatura actual: 72.41°C,Temperatura máxima: 72.41°CTemperatura mínima: 72.41°CCondiciones climáticas: nubes dispersas
+Velocidad del viento: 6.46 m/s, Dirección del viento: 172°Humedad: 54%
+------------------------
+Fecha y hora: 2024-11-04 11:21:11
+Ciudad: Mendoza, Argentina
+Temperatura actual: 73.65°C,Temperatura máxima: 73.65°CTemperatura mínima: 73.65°CCondiciones climáticas: cielo claro
+Velocidad del viento: 4.25 m/s, Dirección del viento: 100°Humedad: 61%
+------------------------
+Fecha y hora: 2024-11-04 12:15:11
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 72.1°C,  Temperatura máxima: 72.1°C,  Temperatura mínima: 72.1°C,  Condiciones climáticas: muy nuboso
+  Velocidad del viento: 12.53 m/s,  Dirección del viento: 136°  Humedad: 38%
+------------------------
+Fecha y hora: 2024-11-04 12:15:52
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 66.27°C,  Temperatura máxima: 66.27°C,  Temperatura mínima: 66.27°C,  Condiciones climáticas: nubes dispersas
+  Velocidad del viento: 6.53 m/s,  Dirección del viento: 142°  Humedad: 45%
+------------------------
+Fecha y hora: 2024-11-04 12:15:52
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 71.82°C,  Temperatura máxima: 71.82°C,  Temperatura mínima: 71.82°C,  Condiciones climáticas: cielo claro
+  Velocidad del viento: 13.62 m/s,  Dirección del viento: 174°  Humedad: 50%
+------------------------
+Fecha y hora: 2024-11-04 12:15:52
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 67.42°C,  Temperatura máxima: 67.42°C,  Temperatura mínima: 67.42°C,  Condiciones climáticas: muy nuboso
+  Velocidad del viento: 8.03 m/s,  Dirección del viento: 160°  Humedad: 47%
+------------------------
+Fecha y hora: 2024-11-04 12:15:52
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 72.41°C,  Temperatura máxima: 72.41°C,  Temperatura mínima: 72.41°C,  Condiciones climáticas: nubes dispersas
+  Velocidad del viento: 6.46 m/s,  Dirección del viento: 172°  Humedad: 54%
+------------------------
+Fecha y hora: 2024-11-04 12:15:52
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 73.65°C,  Temperatura máxima: 73.65°C,  Temperatura mínima: 73.65°C,  Condiciones climáticas: cielo claro
+  Velocidad del viento: 4.25 m/s,  Dirección del viento: 100°  Humedad: 61%
+------------------------
+Fecha y hora: 2024-11-04 12:20:28
+Ciudad: Mendoza, Argentina
+ Temperatura actual: 72.1°C, Temperatura máxima: 72.1°C  Temperatura mínima: 72.1°C  Condiciones climáticas: muy nuboso
+
+  Velocidad del viento: 12.53 m/s, Dirección del viento: 136° Humedad: 38%
+------------------------
+Fecha y hora: 2024-11-04 12:22:35
+Ciudad: Mendoza, Argentina
+Temperatura actual: 72.1°C,Temperatura máxima: 72.1°C Temperatura mínima: 72.1°C
+  Condiciones climáticas: muy nuboso
+ Velocidad del viento: 12.53 m/s,Dirección del viento: 136°
+ Humedad: 38%
+------------------------
+Fecha y hora: 2024-11-04 12:24:21
+Ciudad: Mendoza, Argentina
+Temperatura actual: 72.1°C,Temperatura máxima: 72.1°CTemperatura mínima: 72.1°C
+Condiciones climáticas: muy nuboso
+Velocidad del viento: 12.53 m/s,Dirección del viento: 136°
+Humedad: 38%
+------------------------
