@@ -101,23 +101,25 @@ def validar_pais():
 # Función para guardar las consultas en el archivo "Historial.txt"
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    
+
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
-    consulta += f"Temperatura actual: {informacion['temp_actual']}°C, "
-    consulta += f"Temperatura máxima: {informacion['temp_max']}°C y "
+    consulta += f"Temperatura actual: {informacion['temp_actual']}°C,"
+    consulta += f"Temperatura máxima: {informacion['temp_max']}°C"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
     consulta += f"Condiciones climáticas: {informacion['clima']}\n"
-    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s, "
-    consulta += f"Dirección del viento: {informacion['viento_dir']}° "
+    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s,"
+    consulta += f"Dirección del viento: {informacion['viento_dir']}°\n" 
+    consulta += f"Humedad: {informacion['humedad']}%"
 
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
-    consulta += "\n-------------------------"  # Separador para cada consulta
+    consulta += "\n------------------------"  # Separador para cada consulta
 
     # Guardar en el archivo
     with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
         archivo.write(consulta)
         archivo.write("\n")
+
 
 def obtener_clima(nombre_ciudad, nombre_pais):
     load_dotenv()#obtención de datos de .env
@@ -134,12 +136,15 @@ def obtener_clima(nombre_ciudad, nombre_pais):
         temperatura = data['main']['temp']
         temp_max = data['main']['temp_max']
         temp_min = data['main']['temp_min']
+        humedad = data['main'].get('humidity', 'No disponible')
         viento_velocidad = data['wind']['speed']  # Extraer la velocidad del viento
         viento_direccion = data['wind'].get('deg', 'No disponible')  # Extraer dirección si está disponible
         # Mensaje de notificación con los datos pertinentes
         print(f"\nEl clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
         print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
+        print(f"Humedad: {humedad}%") 
         print(f"Velocidad del viento: {viento_velocidad} m/s, Dirección: {viento_direccion}°.")
+        
 
         # Preparar información para guardar en el historial
         informacion = {
@@ -147,6 +152,7 @@ def obtener_clima(nombre_ciudad, nombre_pais):
             "temp_max": temp_max,
             "temp_min": temp_min,
             "clima": clima,
+            "humedad": humedad,
             "viento_vel": viento_velocidad,
             "viento_dir": viento_direccion
         }
@@ -184,6 +190,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                     "temp": item['main']['temp'],
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
+                    "humedad": item['main']['humidity'],
                     "fenomenos": item['weather'][0]['main'], # Fenómenos meteorológicos
                     "viento_velocidad" : item['wind']['speed'],  # Velocidad del viento
                     "viento_direccion" : item['wind'].get('deg', 'No disponible')  # Dirección del viento si está disponible
@@ -195,6 +202,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             temperatura = item['temp']
             temp_max = item['temp_max']
             temp_min = item['temp_min']
+            humedad = item['humedad']  
             fenomenos = item['fenomenos']
             wind_vel= item['viento_velocidad']
             wind_dir=item['viento_direccion']
@@ -207,6 +215,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             # Mostrar el pronóstico con la información del clima y fenómenos
             print(f"{fecha}: {clima} con una temperatura de {temperatura}{símbolo_medida[unidad_de_medida]}.")
             print(f"Temperatura máxima: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}, mínima: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}.")
+            print(f"Humedad: {humedad}%") 
             print(f"Velocidad del viento: {wind_vel} m/s, Dirección: {wind_dir}°.\n")
 
             if alerta:
@@ -216,6 +225,7 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
                 "temp_actual": temperatura,
                 "temp_max": temp_max,
                 "temp_min": temp_min,
+                "humedad": humedad,
                 "clima": clima,
                 "viento_vel": wind_vel,
                 "viento_dir": wind_dir
