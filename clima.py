@@ -125,11 +125,16 @@ def obtener_ultimas_consultas():
     try:
         with open("Historial.txt", "r") as archivo:
             lineas = archivo.readlines()
-            consultas = [linea.strip() for linea in lineas if "Ciudad" in linea]
-            return consultas[-5:]  # Devuelve las últimas 5 consultas
+            consultas = []
+            consulta_actual = []
+            for linea in lineas:
+                consulta_actual.append(linea)
+                if "------------------------" in linea:
+                    consultas.append(consulta_actual)
+                    consulta_actual = []
+            return consultas[-5:]  # Devuelve las últimas 5 consultas completas
     except FileNotFoundError:
         return []
-
 
 def obtener_clima(nombre_ciudad, nombre_pais):
     load_dotenv()#obtención de datos de .env
@@ -267,19 +272,22 @@ def ver_historial():
 
             if opcion == "1":
                 ultimas_consultas = obtener_ultimas_consultas()
-                print("Últimas consultas leídas:", ultimas_consultas)  # Mensaje de depuración
                 if not ultimas_consultas:
                     print("No hay consultas recientes.")
                     return
 
+                # Mostrar las consultas completas
                 for i, consulta in enumerate(ultimas_consultas, 1):
-                    print(f"{i}. {consulta}")
+                    print(f"{i}.")
+                    for linea in consulta:
+                        print(linea, end="")
+                    print()
 
-                seleccion = input("Seleccione una ciudad: ")
+                seleccion = input("Seleccione una ciudad (número): ")
                 try:
                     seleccion = int(seleccion) - 1
                     if 0 <= seleccion < len(ultimas_consultas):
-                        ciudad, pais = ultimas_consultas[seleccion].split(": ")[1].strip().split(", ")
+                        ciudad, pais = ultimas_consultas[seleccion][1].split(": ")[1].strip().split(", ")
                         obtener_clima(ciudad, pais)
                     else:
                         print("Selección no válida.")
@@ -302,6 +310,7 @@ def ver_historial():
     
     except FileNotFoundError:
         print("El archivo de historial no existe aún. No se han registrado consultas.")
+
 
 # Función para borrar el contenido del historial
 def borrar_historial():
