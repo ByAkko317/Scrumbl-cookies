@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Pronóstico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            padding: 20px;
+            text-align: center;
+        }
+        .form-container {
+            background: #161b22;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        h1 {
+            color: #58a6ff;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        button {
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2ea043;
+        }
+        .image-container {
+            margin-top: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 5px;
+            filter: blur(2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Consulta Pronóstico</h1>
+        
+        <form action="/consulta_pronostico" method="POST">
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required placeholder="Ingrese una ciudad...">
+            
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais" required placeholder="Ingrese el país...">
+            
+            <button type="submit">Ir a Consulta Pronóstico</button>
+        </form>
+    </div>
+    
+    <div class="image-container">
+        <img src="(imagen)" alt="Imagen desenfocada">
+    </div>
+</body>
+</html>
