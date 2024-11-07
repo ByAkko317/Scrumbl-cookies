@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Historial</title>
+</head>
+<body>
+    <h1>Historial de Consultas</h1>
+    <hr>
+    {% if consultas %}
+        <h2>Consultas Registradas:</h2>
+        <ul>
+            {% for consulta in consultas %}
+                <div>
+                    <p><strong>Fecha y Hora:</strong> {{ consulta.fecha_hora }}</p>
+                    {% if consulta.ciudad and consulta.pais %}
+                        <p><strong>Ciudad:</strong> {{ consulta.ciudad }}</p>
+                        <p><strong>País:</strong> {{ consulta.pais }}</p>
+                        <a href="{{ url_for('consulta_desde_historial', ciudad=consulta.ciudad, pais=consulta.pais) }}">Consultar de nuevo</a>
+                    {% else %}
+                        <p>Faltan datos de ciudad o país.</p>
+                    {% endif %}
+                    <p><strong>Detalles:</strong> {{ consulta.detalles }}</p>
+                </div>
+                <hr>
+            {% endfor %}
+        </ul>
+        <form action="{{ url_for('borrar_historial') }}" method="post">
+            <button type="submit">Borrar Historial</button>
+        </form>
+    {% else %}
+        <p>No hay consultas registradas.</p>
+    {% endif %}
+    <button onclick="window.location.href='/'">Volver a la Página Principal</button>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambiar Unidad de Medida</title>
+</head>
+<body>
+    <h2>Cambiar Unidad de Medida</h2>
+    <p>Unidad de medida actual: {{ unidad_actual }}</p>
+    <form method="post">
+        <label>Selecciona la unidad de medida:</label><br>
+        <input type="radio" name="unidad" value="metric" {% if unidad_actual == 'Celsius' %}checked{% endif %}> Métrico (Celsius)<br>
+        <input type="radio" name="unidad" value="imperial" {% if unidad_actual == 'Imperial' %}checked{% endif %}> Imperial (Fahrenheit)<br><br>
+        <button type="submit">Guardar Cambios</button>
+    </form>
+    <button onclick="window.location.href='/'">Volver a la Página Principal</button>
+</body>
+</html>
