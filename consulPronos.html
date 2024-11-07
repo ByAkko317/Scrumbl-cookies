@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Pronóstico</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos generales */
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Contenedor del formulario */
+        .form-container {
+            background-color: #1f1f1f;
+            padding: 30px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        /* Título */
+        .form-container h1 {
+            font-size: 1.8em;
+            color: #0e69f2;
+            margin-bottom: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Etiquetas y campos de entrada */
+        label {
+            display: block;
+            text-align: left;
+            margin: 10px 0 5px;
+            font-size: 0.9em;
+            color: #d3d3d3;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333333;
+            color: #ffffff;
+            font-size: 1em;
+            box-sizing: border-box;
+        }
+
+        /* Estilo del botón */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0e69f2;
+            color: #121212;
+            border: none;
+            border-radius: 4px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: #0e69f2;
+        }
+
+        /* Icono en el botón */
+        button i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Consultar Pronóstico</h1>
+        
+        <form action="/consulta_pronostico" method="POST">
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required placeholder="Ingrese una ciudad...">
+            
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais" required placeholder="Ingrese el país...">
+            
+            <button type="submit"><i class="fas fa-cloud-sun"></i>Consultar Pronóstico</button>
+        </form>
+    </div>
+</body>
+</html>
