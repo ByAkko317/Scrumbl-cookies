@@ -78,3 +78,45 @@ Condiciones climáticas: muy nuboso
 Velocidad del viento: 12.53 m/s,Dirección del viento: 136°
 Humedad: 38%
 ------------------------
+Fecha y hora: 2024-11-04 17:20:54
+Ciudad: Mendoza, Argentina
+Temperatura actual: 76.53°C,Temperatura máxima: 76.53°CTemperatura mínima: 76.53°C
+Condiciones climáticas: nubes dispersas
+Velocidad del viento: 10.36 m/s,Dirección del viento: 110°
+Humedad: 29%
+------------------------
+Fecha y hora: 2024-11-04 18:00:14
+Ciudad: Mendoza, Argentina
+Temperatura actual: 66.4°C,Temperatura máxima: 66.4°CTemperatura mínima: 66.4°C
+Condiciones climáticas: nubes dispersas
+Velocidad del viento: 7.14 m/s,Dirección del viento: 149°
+Humedad: 42%
+------------------------
+Fecha y hora: 2024-11-04 18:00:14
+Ciudad: Mendoza, Argentina
+Temperatura actual: 71.67°C,Temperatura máxima: 71.67°CTemperatura mínima: 71.67°C
+Condiciones climáticas: cielo claro
+Velocidad del viento: 9.66 m/s,Dirección del viento: 169°
+Humedad: 47%
+------------------------
+Fecha y hora: 2024-11-04 18:00:14
+Ciudad: Mendoza, Argentina
+Temperatura actual: 66.88°C,Temperatura máxima: 66.88°CTemperatura mínima: 66.88°C
+Condiciones climáticas: nubes
+Velocidad del viento: 8.23 m/s,Dirección del viento: 166°
+Humedad: 47%
+------------------------
+Fecha y hora: 2024-11-04 18:00:14
+Ciudad: Mendoza, Argentina
+Temperatura actual: 71.17°C,Temperatura máxima: 71.17°CTemperatura mínima: 71.17°C
+Condiciones climáticas: nubes dispersas
+Velocidad del viento: 6.24 m/s,Dirección del viento: 176°
+Humedad: 57%
+------------------------
+Fecha y hora: 2024-11-04 18:00:14
+Ciudad: Mendoza, Argentina
+Temperatura actual: 74.1°C,Temperatura máxima: 74.1°CTemperatura mínima: 74.1°C
+Condiciones climáticas: cielo claro
+Velocidad del viento: 5.12 m/s,Dirección del viento: 119°
+Humedad: 59%
+------------------------
