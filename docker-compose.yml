@@ -1,5 +1,4 @@
 version: '3.8'
-
 services:
   app:
     build: .
@@ -7,9 +6,10 @@ services:
     volumes:
       - .:/usr/src/app
     ports:
-    - "3000:3000" # Ajusta el puerto según tu aplicación
+      - "3000:3000" # Ajusta el puerto según tu aplicación
     env_file:
       - .env # Define el archivo .env que contiene las variables de entorno
     #stdin_open: true  # Para permitir modo interactivo
     #tty: true         # Asigna una pseudo-terminal
     command: python clima.py
+    working_dir: /usr/src/app
