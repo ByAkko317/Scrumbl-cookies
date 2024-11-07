@@ -99,26 +99,36 @@ def validar_pais():
         
         return pais
 # Función para guardar las consultas en el archivo "Historial.txt"
+
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
-    consulta += f"Temperatura actual: {informacion['temp_actual']}°C,"
-    consulta += f"Temperatura máxima: {informacion['temp_max']}°C"
+    consulta += f"Temperatura actual: {informacion['temp_actual']}°C, "
+    consulta += f"Temperatura máxima: {informacion['temp_max']}°C, "
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
     consulta += f"Condiciones climáticas: {informacion['clima']}\n"
-    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s,"
-    consulta += f"Dirección del viento: {informacion['viento_dir']}°\n" 
+    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s, "
+    consulta += f"Dirección del viento: {informacion['viento_dir']}°\n"
     consulta += f"Humedad: {informacion['humedad']}%"
 
     if 'alerta' in informacion:
         consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
-    consulta += "\n------------------------"  # Separador para cada consulta
+    consulta += "\n------------------------\n"  # Separador para cada consulta
 
     # Guardar en el archivo
-    with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
+    with open("Historial.txt", "a") as archivo:
         archivo.write(consulta)
         archivo.write("\n")
+
+def obtener_ultimas_consultas():
+    try:
+        with open("Historial.txt", "r") as archivo:
+            lineas = archivo.readlines()
+            consultas = [linea.strip() for linea in lineas if "Ciudad" in linea]
+            return consultas[-5:]  # Devuelve las últimas 5 consultas
+    except FileNotFoundError:
+        return []
 
 
 def obtener_clima(nombre_ciudad, nombre_pais):
@@ -244,7 +254,6 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
 def ver_historial():
     print("\n"+("="*20)+" Ver Historial "+("="*20)+"\n")
     try:
-        # Abrir el archivo de historial en modo lectura
         with open("Historial.txt", "r") as archivo:
             lineas = archivo.readlines()
             if len(lineas) == 0:
@@ -257,12 +266,25 @@ def ver_historial():
             opcion = input("Seleccione una opción: ")
 
             if opcion == "1":
-                # Mostrar las últimas 5 consultas
-                print("\nÚltimas 5 consultas:\n")
-                for linea in lineas[-35:]:#modificación del indice en negativo para traer las últimas ingresadas
-                    print(linea, end="")
-                    time.sleep(0.5)
-                time.sleep(2)
+                ultimas_consultas = obtener_ultimas_consultas()
+                print("Últimas consultas leídas:", ultimas_consultas)  # Mensaje de depuración
+                if not ultimas_consultas:
+                    print("No hay consultas recientes.")
+                    return
+
+                for i, consulta in enumerate(ultimas_consultas, 1):
+                    print(f"{i}. {consulta}")
+
+                seleccion = input("Seleccione una ciudad: ")
+                try:
+                    seleccion = int(seleccion) - 1
+                    if 0 <= seleccion < len(ultimas_consultas):
+                        ciudad, pais = ultimas_consultas[seleccion].split(": ")[1].strip().split(", ")
+                        obtener_clima(ciudad, pais)
+                    else:
+                        print("Selección no válida.")
+                except ValueError:
+                    print("Por favor, ingrese un número entero válido.")
             elif opcion == "2":
                 ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
                 print(f"\nConsultas relacionadas con {ciudad}:\n")
@@ -274,7 +296,6 @@ def ver_historial():
                 if not encontrado:
                     print(f"No se encontraron consultas para la ciudad: {ciudad}")
             elif opcion == "3":
-                # Llamar a la función de borrar historial
                 borrar_historial()
             else:
                 print("Opción no válida.")
