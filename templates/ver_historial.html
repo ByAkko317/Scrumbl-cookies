@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Historial</title>
+
     <link rel="icon" type="image/png" href="/static/images/galleta.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -24,15 +25,19 @@
         <ul class="w-3/4 md:w-1/2">
             {% for consulta in consultas %}
                 <li class="bg-gray-800 p-4 rounded-md mb-4 shadow-md">
+
                     <p><strong>Fecha y Hora:</strong> {{ consulta.fecha_hora }}</p>
                     {% if consulta.ciudad and consulta.pais %}
                         <p><strong>Ciudad:</strong> {{ consulta.ciudad }}</p>
                         <p><strong>País:</strong> {{ consulta.pais }}</p>
+
                         <a href="{{ url_for('consulta_desde_historial', ciudad=consulta.ciudad, pais=consulta.pais) }}" class="text-blue-400 hover:underline">Consultar el clima con los datos de la consulta (ciudad y país)</a>
+
                     {% else %}
                         <p>Faltan datos de ciudad o país.</p>
                     {% endif %}
                     <p><strong>Detalles:</strong> {{ consulta.detalles }}</p>
+
                 </li>
             {% endfor %}
         </ul>

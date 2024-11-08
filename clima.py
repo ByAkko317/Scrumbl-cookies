@@ -141,8 +141,10 @@ def obtener_clima():
         else:
             return flash(msg="ERROR \nNo se pudo obtener la información del clima.")
 
+
     else:
         return render_template('obtenerClima.html', ciudad=ciudad, pais=pais)
+
 
 @app.route('/consulta_pronostico')
 def consulta_pronóstico():
@@ -226,6 +228,7 @@ def obtener_pronóstico():
             }
     elif result["status"] == "error":
         flash(result["message"])
+        
         return redirect(url_for('consulta_pronostico'))
 
     else:
@@ -296,4 +299,3 @@ def cambiar_unidades():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000, debug=True)
-
