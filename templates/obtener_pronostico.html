@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Pronóstico</title>      
+    <link rel="icon" type="png" href="/static/images/galleta.png">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #0d1117;
+            color: #c9d1d9;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+
+        }
+
+        /* Botón Volver a la Página Principal */
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #2d333b;
+            color: #d1d5db;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #444c56;
+        }
+
+        .back-button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Estilo para el formulario */
+        .form-container {
+            background: #161b22;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #58a6ff;
+            font-size: 24px;
+            margin-bottom: 20px;
+            
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #ffffff;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #30363d;
+            border-radius: 5px;
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+
+        button {
+            background-color: #238636;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2ea043;
+        }
+
+        .icon {
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Botón Volver a la Página Principal -->
+    <button onclick="window.location.href='/'" class="back-button">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Volver a la Página Principal
+    </button>
+
+    <!-- Formulario centrado -->
+    <div class="form-container">
+        <h1><i class="fas fa-cloud-sun icon"></i> Consulta Pronóstico</h1>
+        
+        <form action="/consulta_pronostico" method="POST">
+            <label for="ciudad"><i class="fas fa-city icon"></i> Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required placeholder="Ingrese una ciudad...">
+            
+            <label for="pais"><i class="fas fa-globe icon"></i> País:</label>
+            <input type="text" id="pais" name="pais" required placeholder="Ingrese el país...">
+            
+            <button type="submit"><i class="fas fa-search icon"></i> Consultar Pronóstico</button>
+        </form>
+    </div>
+    
+</body>
+</html>

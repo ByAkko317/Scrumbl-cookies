@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <link rel="icon" type="png" href="/static/images/galleta.png">
+    <style>
+        .flash-message {
+            color: red;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .custom-bg {
+        background-color: #0d1117;
+        }
+    </style>
+</head>
+
+<body class="custom-bg text-white font-bahnschrift flex items-center justify-center min-h-screen">
+
+    <div class="flex flex-col items-center w-full space-y-6 mb-20">
+        <h1 class="text-3xl font-bold text-center mt-4">Bienvenido a la Consulta de Clima</h1>
+        <p class="text-gray-300 text-center bg-gray-800 p-4 rounded-md shadow-md w-3/4 md:w-1/2 mt-10">
+            {{ mensaje_preferencia }}
+        </p>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flash-message text-red-500 font-semibold text-center mt-4">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <button onclick="window.location.href='/consulta_clima'" class="flex items-center justify-center space-x-2 bg-blue-700 bg-opacity-80 hover:bg-blue-600 text-white py-2 px-4 rounded-md w-3/4 md:w-1/2">
+            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5" class="fill-current"/>
+            </svg>
+            <span>Ir a Consulta Clima</span>
+        </button>
+
+        <button onclick="window.location.href='/consulta_pronostico'" class="flex items-center justify-center space-x-2 bg-blue-700 bg-opacity-80 hover:bg-blue-600 text-white py-2 px-4 rounded-md w-3/4 md:w-1/2">
+            <svg class="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="4" class="fill-current"/>
+                <path d="M17 17a5 5 0 0 0-10 0h10z" class="fill-gray-400"/>
+            </svg>
+            <span>Ir a Consulta Pronóstico</span>
+        </button>
+
+        <button onclick="window.location.href='/historial'" class="flex items-center justify-center space-x-2 bg-blue-700 bg-opacity-80 hover:bg-blue-600 text-white py-2 px-4 rounded-md w-3/4 md:w-1/2">
+            <svg class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M3 6h8l2 2h8v10H3V6z" class="fill-current"/>
+            </svg>
+            <span>Ver el Historial</span>
+        </button>
+
+        <button onclick="window.location.href='/cambiar_unidades'" class="flex items-center justify-center space-x-2 bg-blue-700 bg-opacity-80 hover:bg-blue-600 text-white py-2 px-4 rounded-md w-3/4 md:w-1/2">
+            <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2a2 2 0 0 1 2 2v8a4 4 0 1 1-4 0V4a2 2 0 0 1 2-2z" class="fill-current"/>
+            </svg>
+            <span>Cambiar la unidad de medida</span>
+        </button>
+
+    </div>
+
+    <img src="/static/images/scrumbl.png" alt="Mascota" class="absolute bottom-4 right-4 w-32 h-32 object-contain md:w-40 md:h-40">
+</body>
+</html>

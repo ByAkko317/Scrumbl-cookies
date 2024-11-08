@@ -1,6 +1,7 @@
 FROM python:3.12 
 WORKDIR /usr/src/app
-COPY requirements.txt ./
+COPY requirements.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
-COPY clima.py .
+COPY . .
+EXPOSE 3000
 CMD [ "python","./clima.py" ]
