@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener clima</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000000;
+            padding: 20px;
+        }
+        .result {
+            background: rgb(0, 0, 0);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: white;
+        }
+        h1 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label{
+            color: white;
+            font-weight: bold;
+            margin-bottom: 10px;
+            cursor: text;
+        }
+        input[type="text"] {
+            width: 10%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background: #ffffff;
+            cursor: text;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px; 
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #333333;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .mt-6 {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Consulta Clima</h1>
+        
+        <form method="POST" action="{{ url_for('consulta_clima') }}">
+            <div class="input-group">
+                <label for="ciudad">Ciudad:</label>
+                <input type="text" id="ciudad"  name="ciudad" value="{{ciudad if ciudad else ''}}" required placeholder="Ingrese la ciudad..."/>
+            
+                <label for="pais">País:</label>
+                <input type="text" id="pais" name="pais"  value="{{pais if pais else ''}}" required placeholder="Ingrese el país..."/>
+            </div>
+
+            <button type="submit">Consultar clima</button>
+        </form>
+        
+    </div>
+    <div class="mt-6">
+        <button
+            onclick="window.location.href='/'"
+            class="min-w-[84px] cursor-pointer rounded-full h-12 px-5 bg-[#FFFFFF] text-black font-bold text-base leading-normal tracking-[0.015em]"
+        >
+            Volver a la Página Principal
+        </button>
+    </div>
+</body>
+</html>

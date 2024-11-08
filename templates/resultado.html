@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de Consultas</title>
+
+    <!-- Tailwind CSS and Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Bahnschrift', 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+
+        <!-- Centered Weather Result Section -->
+        <div class="flex flex-col items-center text-center"> 
+            <h1 class="text-2xl font-bold mb-4 text-yellow-400">Resultado de la Consulta</h1>
+
+            {% if error_message %}
+                <div class="bg-red-500 p-4 rounded-lg text-white mb-4 w-full max-w-md">
+                    <p><strong>Error:</strong> {{ error_message }}</p>
+                </div>
+                <p>No hay datos disponibles para mostrar.</p>
+            {% elif weather_info %}
+                <p class="text-yellow-400"><strong>Clima Actual en {{ ciudad }}, {{ pais }}:</strong></p>
+                <img src="http://openweathermap.org/img/wn/{{ weather_info.icon }}@2x.png" alt="{{ weather_info.description }}" width="50" height="50" class="mx-auto my-2">
+                <p>Descripción: {{ weather_info.description }}</p>
+                <p>Temperatura: {{ weather_info.temperature }} {{unidad}}</p>
+                <p>Temperatura máxima: {{ weather_info.temp_max }} {{unidad}}</p>
+                <p>Temperatura mínima: {{ weather_info.temp_min }} {{unidad}}</p>
+                <p>Velocidad del Viento: {{ weather_info.wind_speed }} m/s</p>
+                <p>Dirección del Viento: {{ weather_info.wind_direction }}°</p>
+                <p>Humedad: {{weather_info.humidity}}%</p>
+            {% else %}
+                <p>No hay datos disponibles para mostrar.</p>
+            {% endif %}
+        </div>
+
+        <!-- Styled Button -->
+        <div class="mt-6 text-center">
+            <button onclick="window.location.href='/'" class="absolute top-4 left-4 bg-gray-700 text-gray-300 px-4 py-2 rounded-md flex items-center shadow-md hover:bg-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Volver a la Página Principal
+            </button>
+        </div>
+    </div>
+</body>
+</html>
