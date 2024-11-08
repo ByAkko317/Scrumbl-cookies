@@ -69,8 +69,7 @@ def mostrar_menu():
     print("2. Consulta de pronóstico según ciudad")
     print("3. Ver historial")
     print("4. Cambiar unidades")
-    print("5. Resumen")
-    print("6. Salir\n")
+    print("5. Salir\n")
 
 def validar_ciudad():
     while True:
@@ -401,7 +400,7 @@ def preguntar_volver_al_menu():
             print("Saliendo del programa...")
             return False  # Finalizar programa
         else:
-            print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
+            print("Respuesta no válida. Por favor, ingresa 'si' para volver al menú o 'no' para salir del programa y finalizarlo.")
 
 def main():
     cargar_preferencia_unidades()  # Cargar la preferencia de unidad al iniciar
