@@ -139,8 +139,10 @@ def obtener_clima():
             return redirect(url_for('consulta_clima'))
         else:
             return flash(msg="ERROR \nNo se pudo obtener la información del clima.")
+
     else:
-        return render_template('consulta_clima.html', ciudad=ciudad, pais=pais)
+        return render_template('obtenerClima.html', ciudad=ciudad, pais=pais)
+
 
 @app.route('/consulta_pronostico')
 def consulta_pronóstico():
@@ -221,8 +223,8 @@ def obtener_pronóstico():
                 "clima_frecuente": clima_frecuente
             }
     elif result["status"] == "error":
-        flash(result["message"])
-        return redirect(url_for('consulta_clima'))
+        flash(result["message"])     
+        return redirect(url_for('consulta_pronostico'))
     else:
         flash("Error al obtener el pronóstico. Intente de nuevo más tarde.")
         return redirect(url_for('consulta_pronostico'))

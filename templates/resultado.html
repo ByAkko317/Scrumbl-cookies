@@ -3,59 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resultado de Consultas</title>
+    <title>Resultado de Consultas</title> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="png" href="/static/images/galleta.png">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
-        .result { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #333; }
+        body {
+            font-family: 'Bahnschrift', 'Plus Jakarta Sans', sans-serif;
+        }
     </style>
 </head>
-<body>
-    <div class="result">
-        <h1>Resultado de la Consulta</h1>
+<body class="bg-gray-900 text-white min-h-screen flex items-center justify-center">
+    <div class="bg-gray-800 text-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
 
-        {% if error_message %}
-            <div class="error">
-                <p><strong>Error:</strong> {{ error_message }}</p>
-            </div>
-        {% elif weather_info %}
-            <p><strong>Clima Actual en {{ ciudad }}, {{ pais }}:</strong></p>
-            <img src="http://openweathermap.org/img/wn/{{ weather_info.icon }}@2x.png" alt="{{ weather_info.description }}" width="50" height="50">
-            <p>Descripción: {{ weather_info.description }}</p>
-            <p>Temperatura: {{ weather_info.temperature }} {{unidad}}</p>
-            <p>Temperatura máxima: {{ weather_info.temp_max }} {{unidad}}</p>
-            <p>Temperatura mínima: {{ weather_info.temp_min }} {{unidad}}</p>
-            <p>Velocidad del Viento: {{ weather_info.wind_speed }} m/s</p>
-            <p>Dirección del Viento: {{ weather_info.wind_direction }}°</p>
-            <p>Humedad: {{weather_info.humidity}}%</p>
-        {% elif pronosticos %}
-            <h2>Pronóstico de 5 días para {{ ciudad }}, {{ pais }}</h2>
+        
+        <div class="flex flex-col items-center text-center"> 
+            <h1 class="text-2xl font-bold mb-4 text-yellow-400">Resultado de la Consulta</h1>
 
-            <h3>Resumen de los Próximos 5 Días</h3>
-            {% for fecha, resumen in resumen.items() %}
-                <h3>{{ fecha }}</h3>
-                <p>Temperatura Promedio: {{ resumen.temp_promedio }} {{ unidad }}</p>
-                <p>Humedad Promedio: {{ resumen.humedad_promedio }}%</p>
-                <p>Condición Climática más Frecuente: {{ resumen.clima_frecuente }}</p>
-                <hr>
-            {% endfor %}
-
-            <h3>Detalles Diarios</h3>
-            {% for fecha, item in pronosticos.items() %}
-                <h3>{{ fecha }}</h3>
-                <img src="http://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="{{ item.clima }}" width="50" height="50">
-                <p>{{ item.clima }} - Temp: {{ item.temp }}{{ unidad }}, Máx: {{ item.temp_max }}{{ unidad }}, Mín: {{ item.temp_min }}{{ unidad }}.</p>
-                <p>Humedad: {{ item.humedad }}%.</p>
-                <p>Viento: {{ item.viento_velocidad }} m/s, Dirección: {{ item.viento_direccion }}°.</p>
-                {% if item.alerta %}
-                    <p style="color: red;">{{ item.alerta }}</p>
-                {% endif %}
-                <hr>
-            {% endfor %}
-        {% else %}
-            <p>No hay datos disponibles para mostrar.</p>
-        {% endif %}
+            {% if error_message %}
+                <div class="bg-red-500 p-4 rounded-lg text-white mb-4 w-full max-w-md">
+                    <p><strong>Error:</strong> {{ error_message }}</p>
+                </div>
+                <p>No hay datos disponibles para mostrar.</p>
+            {% elif weather_info %}
+                <p class="text-yellow-400"><strong>Clima Actual en {{ ciudad }}, {{ pais }}:</strong></p>
+                <img src="http://openweathermap.org/img/wn/{{ weather_info.icon }}@2x.png" alt="{{ weather_info.description }}" width="50" height="50" class="mx-auto my-2">
+                <p>Descripción: {{ weather_info.description }}</p>
+                <p>Temperatura: {{ weather_info.temperature }} {{unidad}}</p>
+                <p>Temperatura máxima: {{ weather_info.temp_max }} {{unidad}}</p>
+                <p>Temperatura mínima: {{ weather_info.temp_min }} {{unidad}}</p>
+                <p>Velocidad del Viento: {{ weather_info.wind_speed }} m/s</p>
+                <p>Dirección del Viento: {{ weather_info.wind_direction }}°</p>
+                <p>Humedad: {{weather_info.humidity}}%</p>
+            {% elif pronosticos %}
+                <h2 class="text-xl font-semibold my-4 text-center text-yellow-400">Pronóstico de 5 días para {{ ciudad }}, {{ pais }}</h2>
     
-    <button onclick="window.location.href='/'">Volver a la Página Principal</button>
+                <!-- Two-column layout for Resumen and Detalles -->
+                <div class="flex flex-col lg:flex-row gap-6">
+                    
+                    <!-- Left Column: Resumen de los Próximos 5 Días -->
+                    <div class="w-full lg:w-1/2">
+                        <h3 class="font-medium text-lg mb-4 text-yellow-400">Resumen de los Próximos 5 Días</h3>
+                        {% for fecha, resumen in resumen.items() %}
+                            <div class="mb-4">
+                                <h4 class="mt-3 font-semibold">{{ fecha }}</h4>
+                                <p>Temperatura Promedio: {{ resumen.temp_promedio }} {{ unidad }}</p>
+                                <p>Humedad Promedio: {{ resumen.humedad_promedio }}%</p>
+                                <p>Condición Climática más Frecuente: {{ resumen.clima_frecuente }}</p>
+                                <hr class="my-3 border-gray-600">
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="w-full lg:w-1/2">
+                        <h3 class="font-medium text-lg mb-4 text-yellow-400">Detalles Diarios</h3>
+                        {% for fecha, item in pronosticos.items() %}
+                            <div class="mb-4">
+                                <h4 class="mt-3 font-semibold">{{ fecha }}</h4>
+                                <img src="http://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="{{ item.clima }}" width="50" height="50">
+                                <p>{{ item.clima }} - Temp: {{ item.temp }}{{ unidad }}, Máx: {{ item.temp_max }}{{ unidad }}, Mín: {{ item.temp_min }}{{ unidad }}.</p>
+                                <p>Humedad: {{ item.humedad }}%.</p>
+                                <p>Viento: {{ item.viento_velocidad }} m/s, Dirección: {{ item.viento_direccion }}°.</p>
+                                {% if item.alerta %}
+                                    <p class="text-red-500">{{ item.alerta }}</p>
+                                {% endif %}
+                                <hr class="my-3 border-gray-600">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% else %}
+                <p>No hay datos disponibles para mostrar.</p>
+            {% endif %}
+        </div>
+
+        
+        <div class="mt-6 text-center">
+            <button onclick="window.location.href='/'" class="absolute top-4 left-4 bg-gray-700 text-gray-300 px-4 py-2 rounded-md flex items-center shadow-md hover:bg-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Volver a la Página Principal
+            </button>
+        </div>
+    </div>
 </body>
 </html>
