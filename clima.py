@@ -67,33 +67,8 @@ class ApiRequestHandler:
 
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
+    
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
-<<<<<<< HEAD
-    consulta += f"Temperatura actual: {informacion['temp_actual']}°C,"
-    consulta += f"Temperatura máxima: {informacion['temp_max']}°C"
-    consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
-    consulta += f"Condiciones climáticas: {informacion['clima']}\n"
-    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s,"
-    consulta += f"Dirección del viento: {informacion['viento_dir']}°\n " 
-    consulta += f"Humedad: {informacion['humedad']}%"
-
-    if 'alerta' in informacion:
-        consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
-    consulta += "\n------------------------"  # Separador para cada consulta
-
-    # Guardar en el archivo
-    with open("Historial.txt", "a") as archivo: #los bloques with sirven para la ejecución de los comandos open, write o read, y close de forma automatizada
-        archivo.write(consulta)
-        archivo.write("\n")
-
-
-def obtener_clima(nombre_ciudad, nombre_pais):
-    load_dotenv()#obtención de datos de .env
-    api = os.getenv('API')
-    global unidad_de_medida
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
-=======
     consulta += f"Temperatura actual: {informacion['temp_actual']}{símbolo_medida[unidad_de_medida]}, "
     consulta += f"Temperatura máxima: {informacion['temp_max']}{símbolo_medida[unidad_de_medida]} y "
     consulta += f"Temperatura mínima: {informacion['temp_min']}{símbolo_medida[unidad_de_medida]}.\n"
@@ -110,41 +85,12 @@ def obtener_clima(nombre_ciudad, nombre_pais):
 def validar_entrada(texto):
     solo_letras = re.compile(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$')
     return solo_letras.match(texto) is not None
->>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
 
 @app.route("/")
 def home():
     mensaje_preferencia = cargar_preferencia_unidades()
     return render_template('index.html', mensaje_preferencia=mensaje_preferencia, simbolo=símbolo_medida[unidad_de_medida])
 
-<<<<<<< HEAD
-    if result["status"] == "success":
-        data = result["data"]#navegación dentro del JSON obtenido en formato diccionario, utilizando slicing
-        clima = data['weather'][0]['description']
-        temperatura = data['main']['temp']
-        temp_max = data['main']['temp_max']
-        temp_min = data['main']['temp_min']
-        humedad = data['main'].get('humidity', 'No disponible')
-        viento_velocidad = data['wind']['speed']  # Extraer la velocidad del viento
-        viento_direccion = data['wind'].get('deg', 'No disponible')  # Extraer dirección si está disponible
-        # Mensaje de notificación con los datos pertinentes
-        print(f"\nEl clima en {nombre_ciudad}, {nombre_pais} es: {clima} con una temperatura de {temperatura} {símbolo_medida[unidad_de_medida]}.")
-        print(f"Temperatura máxima: {temp_max}{símbolo_medida[unidad_de_medida]}, Temperatura mínima: {temp_min}{símbolo_medida[unidad_de_medida]}.")
-        print(f"Humedad: {humedad}%") 
-        print(f"Velocidad del viento: {viento_velocidad} m/s, Dirección: {viento_direccion}°.")
-        
-
-        # Preparar información para guardar en el historial
-        informacion = {
-            "temp_actual": temperatura,
-            "temp_max": temp_max,
-            "temp_min": temp_min,
-            "clima": clima,
-            "humedad": humedad,
-            "viento_vel": viento_velocidad,
-            "viento_dir": viento_direccion
-        }
-=======
 @app.route('/consulta_clima')
 def consulta_clima():
     return render_template('obtenerCLima.html')
@@ -154,7 +100,6 @@ def obtener_clima():
     # Recibe los datos del formulario o de la url
     ciudad = request.args.get('ciudad') or request.form.get('ciudad', '').strip()
     pais = request.args.get('pais') or request.form.get('pais', '').strip()
->>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
 
     if ciudad and pais:
         load_dotenv()
@@ -229,18 +174,11 @@ def obtener_pronóstico():
                     "temp": item['main']['temp'],
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
-<<<<<<< HEAD
-                    "humedad": item['main']['humidity'],
-                    "fenomenos": item['weather'][0]['main'], # Fenómenos meteorológicos
-                    "viento_velocidad" : item['wind']['speed'],  # Velocidad del viento
-                    "viento_direccion" : item['wind'].get('deg', 'No disponible')  # Dirección del viento si está disponible
-=======
                     "fenomenos": item['weather'][0]['main'],
                     "viento_velocidad": item['wind']['speed'],
                     "viento_direccion": item['wind'].get('deg', 'No disponible'),
                     "humedad": item['main'].get('humidity'),
                     "icon": item['weather'][0]['icon']
->>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
                 }
                 if fecha not in resumen_datos:
                     resumen_datos[fecha] = {"temp": [], "humedad": [], "climas": []}
@@ -252,7 +190,6 @@ def obtener_pronóstico():
             temperatura = item['temp']
             temp_max = item['temp_max']
             temp_min = item['temp_min']
-            humedad = item['humedad']  
             fenomenos = item['fenomenos']
             wind_vel= item['viento_velocidad']
             wind_dir=item['viento_direccion']
@@ -260,29 +197,6 @@ def obtener_pronóstico():
             alerta = ""
             if fenomenos in ['Rain', 'Thunderstorm', 'Snow']:
                 alerta = f"¡Atención! Se esperan {fenomenos.lower()}."
-<<<<<<< HEAD
-
-            # Mostrar el pronóstico con la información del clima y fenómenos
-            print(f"{fecha}: {clima} con una temperatura de {temperatura}{símbolo_medida[unidad_de_medida]}.")
-            print(f"Temperatura máxima: {temp_max:.2f}{símbolo_medida[unidad_de_medida]}, mínima: {temp_min:.2f}{símbolo_medida[unidad_de_medida]}.")
-            print(f"Humedad: {humedad}%") 
-            print(f"Velocidad del viento: {wind_vel} m/s, Dirección: {wind_dir}°.\n")
-
-            if alerta:
-                print(alerta)  # Mostrar alerta si hay un fenómeno peligroso
-            print()  # Espacio en blanco entre los días
-            informacion = {
-                "temp_actual": temperatura,
-                "temp_max": temp_max,
-                "temp_min": temp_min,
-                "humedad": humedad,
-                "clima": clima,
-                "viento_vel": wind_vel,
-                "viento_dir": wind_dir
-            }
-
-            # Verificar si hay alertas meteorológicas en los datos recibidos
-=======
                 item['alerta'] = alerta
             informacion = {
                     "temp_actual": temperatura,
@@ -293,7 +207,6 @@ def obtener_pronóstico():
                     "viento_dir": wind_dir,
                     "humedad": humedad
                 }
->>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
             if 'alerts' in data:
                 informacion['alerta'] = data['alerts'][0]['description']
             guardar_en_historial(ciudad, pais, informacion)
