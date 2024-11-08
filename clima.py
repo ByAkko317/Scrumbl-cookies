@@ -67,9 +67,8 @@ class ApiRequestHandler:
 
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-
+    
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
-
     consulta += f"Temperatura actual: {informacion['temp_actual']}{símbolo_medida[unidad_de_medida]}, "
     consulta += f"Temperatura máxima: {informacion['temp_max']}{símbolo_medida[unidad_de_medida]} y "
     consulta += f"Temperatura mínima: {informacion['temp_min']}{símbolo_medida[unidad_de_medida]}.\n"
@@ -141,7 +140,6 @@ def obtener_clima():
         else:
             return flash(msg="ERROR \nNo se pudo obtener la información del clima.")
 
-
     else:
         return render_template('obtenerClima.html', ciudad=ciudad, pais=pais)
 
@@ -178,7 +176,6 @@ def obtener_pronóstico():
                     "temp": item['main']['temp'],
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
-
                     "fenomenos": item['weather'][0]['main'],
                     "viento_velocidad": item['wind']['speed'],
                     "viento_direccion": item['wind'].get('deg', 'No disponible'),
@@ -195,7 +192,6 @@ def obtener_pronóstico():
             temperatura = item['temp']
             temp_max = item['temp_max']
             temp_min = item['temp_min']
-            humedad = item['humedad']  
             fenomenos = item['fenomenos']
             wind_vel= item['viento_velocidad']
             wind_dir=item['viento_direccion']
@@ -227,10 +223,8 @@ def obtener_pronóstico():
                 "clima_frecuente": clima_frecuente
             }
     elif result["status"] == "error":
-        flash(result["message"])
-        
+        flash(result["message"])     
         return redirect(url_for('consulta_pronostico'))
-
     else:
         flash("Error al obtener el pronóstico. Intente de nuevo más tarde.")
         return redirect(url_for('consulta_pronostico'))
