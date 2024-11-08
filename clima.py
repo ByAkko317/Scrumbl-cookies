@@ -139,8 +139,9 @@ def obtener_clima():
             return redirect(url_for('consulta_clima'))
         else:
             return flash(msg="ERROR \nNo se pudo obtener la información del clima.")
+
     else:
-        return render_template('consulta_clima.html', ciudad=ciudad, pais=pais)
+        return render_template('obtenerClima.html', ciudad=ciudad, pais=pais)
 
 @app.route('/consulta_pronostico')
 def consulta_pronóstico():
@@ -155,7 +156,7 @@ def obtener_pronóstico():
     if not validar_entrada(ciudad) or not validar_entrada(pais):
         flash("Por favor, ingrese solo letras en ambos campos.")
         return redirect(url_for('consulta_pronostico'))
-    
+
     api_url = f"https://api.openweathermap.org/data/2.5/forecast?q={ciudad},{pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
     
     api_handler = ApiRequestHandler(api_url)
@@ -221,8 +222,9 @@ def obtener_pronóstico():
                 "clima_frecuente": clima_frecuente
             }
     elif result["status"] == "error":
-        flash(result["message"])
-        return redirect(url_for('consulta_clima'))
+
+        flash(result["message"])     
+        return redirect(url_for('consulta_pronostico'))
     else:
         flash("Error al obtener el pronóstico. Intente de nuevo más tarde.")
         return redirect(url_for('consulta_pronostico'))
