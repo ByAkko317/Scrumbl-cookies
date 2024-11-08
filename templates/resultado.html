@@ -39,6 +39,43 @@
                 <p>Velocidad del Viento: {{ weather_info.wind_speed }} m/s</p>
                 <p>Dirección del Viento: {{ weather_info.wind_direction }}°</p>
                 <p>Humedad: {{weather_info.humidity}}%</p>
+            {% elif pronosticos %}
+                <h2 class="text-xl font-semibold my-4 text-center text-yellow-400">Pronóstico de 5 días para {{ ciudad }}, {{ pais }}</h2>
+    
+                <!-- Two-column layout for Resumen and Detalles -->
+                <div class="flex flex-col lg:flex-row gap-6">
+                    
+                    <!-- Left Column: Resumen de los Próximos 5 Días -->
+                    <div class="w-full lg:w-1/2">
+                        <h3 class="font-medium text-lg mb-4 text-yellow-400">Resumen de los Próximos 5 Días</h3>
+                        {% for fecha, resumen in resumen.items() %}
+                            <div class="mb-4">
+                                <h4 class="mt-3 font-semibold">{{ fecha }}</h4>
+                                <p>Temperatura Promedio: {{ resumen.temp_promedio }} {{ unidad }}</p>
+                                <p>Humedad Promedio: {{ resumen.humedad_promedio }}%</p>
+                                <p>Condición Climática más Frecuente: {{ resumen.clima_frecuente }}</p>
+                                <hr class="my-3 border-gray-600">
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="w-full lg:w-1/2">
+                        <h3 class="font-medium text-lg mb-4 text-yellow-400">Detalles Diarios</h3>
+                        {% for fecha, item in pronosticos.items() %}
+                            <div class="mb-4">
+                                <h4 class="mt-3 font-semibold">{{ fecha }}</h4>
+                                <img src="http://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="{{ item.clima }}" width="50" height="50">
+                                <p>{{ item.clima }} - Temp: {{ item.temp }}{{ unidad }}, Máx: {{ item.temp_max }}{{ unidad }}, Mín: {{ item.temp_min }}{{ unidad }}.</p>
+                                <p>Humedad: {{ item.humedad }}%.</p>
+                                <p>Viento: {{ item.viento_velocidad }} m/s, Dirección: {{ item.viento_direccion }}°.</p>
+                                {% if item.alerta %}
+                                    <p class="text-red-500">{{ item.alerta }}</p>
+                                {% endif %}
+                                <hr class="my-3 border-gray-600">
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
             {% else %}
                 <p>No hay datos disponibles para mostrar.</p>
             {% endif %}

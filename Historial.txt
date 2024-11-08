@@ -1,0 +1,80 @@
+Fecha y hora: 2024-11-08 12:00:22
+Ciudad: MENDOZA, ARGENTINA
+Temperatura actual: 74.73ºF, Temperatura máxima: 74.73ºF y Temperatura mínima: 74.73ºF.
+Condiciones climáticas: cielo claro, humedad: 43% .
+Velocidad del viento: 4.61 m/s, Dirección del viento: 90° 
+Fecha y hora: 2024-11-08 12:00:31
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 74.46ºF, Temperatura máxima: 74.46ºF y Temperatura mínima: 74.46ºF.
+Condiciones climáticas: cielo claro, humedad: 50% .
+Velocidad del viento: 3.65 m/s, Dirección del viento: 109° 
+Fecha y hora: 2024-11-08 12:00:31
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 70.36ºF, Temperatura máxima: 70.36ºF y Temperatura mínima: 70.36ºF.
+Condiciones climáticas: algo de nubes, humedad: 55% .
+Velocidad del viento: 15.7 m/s, Dirección del viento: 177° 
+Fecha y hora: 2024-11-08 12:00:31
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 63.93ºF, Temperatura máxima: 63.93ºF y Temperatura mínima: 63.93ºF.
+Condiciones climáticas: cielo claro, humedad: 56% .
+Velocidad del viento: 7.07 m/s, Dirección del viento: 136° 
+Fecha y hora: 2024-11-08 12:00:31
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 64.83ºF, Temperatura máxima: 64.83ºF y Temperatura mínima: 64.83ºF.
+Condiciones climáticas: cielo claro, humedad: 35% .
+Velocidad del viento: 5.75 m/s, Dirección del viento: 92° 
+Fecha y hora: 2024-11-08 12:00:31
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 69.1ºF, Temperatura máxima: 69.1ºF y Temperatura mínima: 69.1ºF.
+Condiciones climáticas: nubes dispersas, humedad: 31% .
+Velocidad del viento: 6.17 m/s, Dirección del viento: 164° 
+Fecha y hora: 2024-11-08 12:00:44
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 74.46ºF, Temperatura máxima: 74.46ºF y Temperatura mínima: 74.46ºF.
+Condiciones climáticas: cielo claro, humedad: 50% .
+Velocidad del viento: 3.65 m/s, Dirección del viento: 109° 
+Fecha y hora: 2024-11-08 12:00:44
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 70.36ºF, Temperatura máxima: 70.36ºF y Temperatura mínima: 70.36ºF.
+Condiciones climáticas: algo de nubes, humedad: 55% .
+Velocidad del viento: 15.7 m/s, Dirección del viento: 177° 
+Fecha y hora: 2024-11-08 12:00:44
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 63.93ºF, Temperatura máxima: 63.93ºF y Temperatura mínima: 63.93ºF.
+Condiciones climáticas: cielo claro, humedad: 56% .
+Velocidad del viento: 7.07 m/s, Dirección del viento: 136° 
+Fecha y hora: 2024-11-08 12:00:44
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 64.83ºF, Temperatura máxima: 64.83ºF y Temperatura mínima: 64.83ºF.
+Condiciones climáticas: cielo claro, humedad: 35% .
+Velocidad del viento: 5.75 m/s, Dirección del viento: 92° 
+Fecha y hora: 2024-11-08 12:00:44
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 69.1ºF, Temperatura máxima: 69.1ºF y Temperatura mínima: 69.1ºF.
+Condiciones climáticas: nubes dispersas, humedad: 31% .
+Velocidad del viento: 6.17 m/s, Dirección del viento: 164° 
+Fecha y hora: 2024-11-08 12:05:10
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 74.46ºF, Temperatura máxima: 74.46ºF y Temperatura mínima: 74.46ºF.
+Condiciones climáticas: cielo claro, humedad: 50% .
+Velocidad del viento: 3.65 m/s, Dirección del viento: 109° 
+Fecha y hora: 2024-11-08 12:05:10
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 70.36ºF, Temperatura máxima: 70.36ºF y Temperatura mínima: 70.36ºF.
+Condiciones climáticas: algo de nubes, humedad: 55% .
+Velocidad del viento: 15.7 m/s, Dirección del viento: 177° 
+Fecha y hora: 2024-11-08 12:05:10
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 63.93ºF, Temperatura máxima: 63.93ºF y Temperatura mínima: 63.93ºF.
+Condiciones climáticas: cielo claro, humedad: 56% .
+Velocidad del viento: 7.07 m/s, Dirección del viento: 136° 
+Fecha y hora: 2024-11-08 12:05:10
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 64.83ºF, Temperatura máxima: 64.83ºF y Temperatura mínima: 64.83ºF.
+Condiciones climáticas: cielo claro, humedad: 35% .
+Velocidad del viento: 5.75 m/s, Dirección del viento: 92° 
+Fecha y hora: 2024-11-08 12:05:10
+Ciudad: MENDOZA , ARGENTINA
+Temperatura actual: 69.1ºF, Temperatura máxima: 69.1ºF y Temperatura mínima: 69.1ºF.
+Condiciones climáticas: nubes dispersas, humedad: 31% .
+Velocidad del viento: 6.17 m/s, Dirección del viento: 164° 
