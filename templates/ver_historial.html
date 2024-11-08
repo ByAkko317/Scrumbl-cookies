@@ -4,34 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Historial</title>
+    <link rel="icon" type="image/png" href="/static/images/galleta.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Historial de Consultas</h1>
-    <hr>
+<body class="bg-gray-900 text-gray-300 flex flex-col items-center min-h-screen">
+
+    <button onclick="window.location.href='/'" class="absolute top-4 left-4 bg-gray-700 text-gray-300 px-4 py-2 rounded-md flex items-center shadow-md hover:bg-gray-600">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Volver a la Página Principal
+    </button>
+
+    <h1 class="text-3xl font-bold text-center mt-4">Historial de Consultas</h1>
+    <hr class="border-gray-700 my-4 w-3/4">
+
     {% if consultas %}
-        <h2>Consultas Registradas:</h2>
-        <ul>
+        <h2 class="text-xl font-semibold text-center mb-4">Consultas Registradas:</h2>
+        <ul class="w-3/4 md:w-1/2">
             {% for consulta in consultas %}
-                <div>
+                <li class="bg-gray-800 p-4 rounded-md mb-4 shadow-md">
                     <p><strong>Fecha y Hora:</strong> {{ consulta.fecha_hora }}</p>
                     {% if consulta.ciudad and consulta.pais %}
                         <p><strong>Ciudad:</strong> {{ consulta.ciudad }}</p>
                         <p><strong>País:</strong> {{ consulta.pais }}</p>
-                        <a href="{{ url_for('consulta_desde_historial', ciudad=consulta.ciudad, pais=consulta.pais) }}">Consultar de nuevo</a>
+                        <a href="{{ url_for('consulta_desde_historial', ciudad=consulta.ciudad, pais=consulta.pais) }}" class="text-blue-400 hover:underline">Consultar el clima con los datos de la consulta (ciudad y país)</a>
                     {% else %}
                         <p>Faltan datos de ciudad o país.</p>
                     {% endif %}
                     <p><strong>Detalles:</strong> {{ consulta.detalles }}</p>
-                </div>
-                <hr>
+                </li>
             {% endfor %}
         </ul>
-        <form action="{{ url_for('borrar_historial') }}" method="post">
-            <button type="submit">Borrar Historial</button>
-        </form>
     {% else %}
-        <p>No hay consultas registradas.</p>
+        <p class="text-gray-400 mt-4">No hay consultas registradas.</p>
     {% endif %}
-    <button onclick="window.location.href='/'">Volver a la Página Principal</button>
+
+    <form action="{{ url_for('borrar_historial') }}" method="post" class="mt-8 mb-4 flex justify-center w-full">
+        <button type="submit" class="bg-red-600 text-gray-300 px-6 py-2 rounded-md flex items-center shadow-md hover:bg-red-500"> 
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 3H5a2 2 0 00-2 2v1h18V5a2 2 0 00-2-2h-4m-6 0v18m4-18v18m4-18v18m4-18v18" />
+            </svg>
+            Borrar Historial
+        </button>
+    </form>
 </body>
 </html>
