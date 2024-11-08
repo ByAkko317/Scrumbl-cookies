@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado de Consultas</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; padding: 20px; }
+        .result { background: white; padding: 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <div class="result">
+        <h1>Resultado de la Consulta</h1>
+
+        {% if error_message %}
+            <div class="error">
+                <p><strong>Error:</strong> {{ error_message }}</p>
+            </div>
+        {% elif weather_info %}
+            <p><strong>Clima Actual en {{ ciudad }}, {{ pais }}:</strong></p>
+            <img src="http://openweathermap.org/img/wn/{{ weather_info.icon }}@2x.png" alt="{{ weather_info.description }}" width="50" height="50">
+            <p>Descripción: {{ weather_info.description }}</p>
+            <p>Temperatura: {{ weather_info.temperature }} {{unidad}}</p>
+            <p>Temperatura máxima: {{ weather_info.temp_max }} {{unidad}}</p>
+            <p>Temperatura mínima: {{ weather_info.temp_min }} {{unidad}}</p>
+            <p>Velocidad del Viento: {{ weather_info.wind_speed }} m/s</p>
+            <p>Dirección del Viento: {{ weather_info.wind_direction }}°</p>
+            <p>Humedad: {{weather_info.humidity}}%</p>
+        {% elif pronosticos %}
+            <h2>Pronóstico de 5 días para {{ ciudad }}, {{ pais }}</h2>
+
+            <h3>Resumen de los Próximos 5 Días</h3>
+            {% for fecha, resumen in resumen.items() %}
+                <h3>{{ fecha }}</h3>
+                <p>Temperatura Promedio: {{ resumen.temp_promedio }} {{ unidad }}</p>
+                <p>Humedad Promedio: {{ resumen.humedad_promedio }}%</p>
+                <p>Condición Climática más Frecuente: {{ resumen.clima_frecuente }}</p>
+                <hr>
+            {% endfor %}
+
+            <h3>Detalles Diarios</h3>
+            {% for fecha, item in pronosticos.items() %}
+                <h3>{{ fecha }}</h3>
+                <img src="http://openweathermap.org/img/wn/{{ item.icon }}@2x.png" alt="{{ item.clima }}" width="50" height="50">
+                <p>{{ item.clima }} - Temp: {{ item.temp }}{{ unidad }}, Máx: {{ item.temp_max }}{{ unidad }}, Mín: {{ item.temp_min }}{{ unidad }}.</p>
+                <p>Humedad: {{ item.humedad }}%.</p>
+                <p>Viento: {{ item.viento_velocidad }} m/s, Dirección: {{ item.viento_direccion }}°.</p>
+                {% if item.alerta %}
+                    <p style="color: red;">{{ item.alerta }}</p>
+                {% endif %}
+                <hr>
+            {% endfor %}
+        {% else %}
+            <p>No hay datos disponibles para mostrar.</p>
+        {% endif %}
+    
+    <button onclick="window.location.href='/'">Volver a la Página Principal</button>
+</body>
+</html>

@@ -1,14 +1,31 @@
+from flask import Flask,render_template,request,flash,redirect,url_for
 from dotenv import load_dotenv
 from requests.exceptions import Timeout, ConnectionError, HTTPError, RequestException
-import os 
 import requests
+import os
+import re
 import time
+
+app=Flask(__name__)
+load_dotenv()
+app.secret_key = os.getenv('SECRET_KEY')
 
 unidad_de_medida = "metric"
 símbolo_medida = { 
     "metric": "ºC",
     "imperial": "ºF"
 }
+def cargar_preferencia_unidades():
+    global unidad_de_medida
+    mensaje = ""
+    try:
+        with open("Preferencia.txt", "r") as archivo:
+            unidad_de_medida = archivo.readline().strip()
+            mensaje = f"Se ha cargado la preferencia de unidad: {unidad_de_medida}."
+    except FileNotFoundError:
+        mensaje = "No se encontró un archivo de preferencias. Se utilizará 'metric' como predeterminado."
+        unidad_de_medida = "metric"
+    return mensaje
 
 class ApiRequestHandler:
     def __init__(self, api_url):
@@ -16,12 +33,9 @@ class ApiRequestHandler:
 
     def make_request(self):
         try:
-            # Realizar la solicitud con un timeout de 5 segundos
             response = requests.get(self.api_url, timeout=5)
-
-            # Manejo de los códigos de estado HTTP
             if 200 <= response.status_code < 300:
-                return {"status": "success", "data": response.json()}  # Procesar la respuesta JSON
+                return {"status": "success", "data": response.json()} 
             elif response.status_code == 400:
                 return {"status": "error", "message": "Solicitud inválida, revise los datos ingresados."}
             elif response.status_code == 401:
@@ -44,7 +58,6 @@ class ApiRequestHandler:
             return {"status": "error", "message": f"Error en la solicitud: {req_err}"}
         except Exception as err:
             return {"status": "error", "message": f"Ocurrió un error inesperado: {err}"}
-    #funcion para reintentar la la solicitud, con 3 reintentos
     def retry_request(self, retries=3):
         for attempt in range(retries):
             result = self.make_request()
@@ -52,57 +65,11 @@ class ApiRequestHandler:
                 return result
         return {"status": "error", "message": "Se agotaron los intentos. Intente más tarde."}
 
-# Función para cargar la preferencia de unidad de medida desde un archivo
-def cargar_preferencia_unidades():
-    global unidad_de_medida
-    try:
-        with open("Preferencia.txt", "r") as archivo:
-            unidad_de_medida = archivo.readline().strip()
-            print(f"Se ha cargado la preferencia de unidad: {unidad_de_medida}")
-    except FileNotFoundError:
-        print("No se encontró un archivo de preferencias, se utilizará 'metric' como predeterminado.")
-        unidad_de_medida = "metric"
-
-def mostrar_menu():
-    print("\nMenú de opciones:\n")
-    print("1. Consulta de clima según ciudad")
-    print("2. Consulta de pronóstico según ciudad")
-    print("3. Ver historial")
-    print("4. Cambiar unidades")
-    print("5. Salir")
-
-def validar_ciudad():
-    while True:
-        ciudad = input("Por favor, introduce el nombre de una ciudad: ")
-        
-        if not ciudad.strip():#.strip es para asegurarse que el valor ingresado no esté vacío
-            print("El nombre de la ciudad no puede estar vacío. Inténtalo de nuevo.")
-            continue
-        
-        if not ciudad.replace(" ", "").isalpha():#.isalpha para corroborar que no hayan ni números ni caracteres especiales
-            print("El nombre de la ciudad solo debe contener letras y espacios. Inténtalo de nuevo.")
-            continue
-        
-        return ciudad
-
-def validar_pais():
-    while True:
-        pais = input("Introduce el nombre del país de la ciudad: ")
-        
-        if not pais.strip():
-            print("El nombre del país no puede estar vacío. Inténtalo de nuevo.")
-            continue
-        
-        if not pais.replace(" ", "").isalpha():
-            print("El nombre del país solo debe contener letras y espacios. Inténtalo de nuevo.")
-            continue
-        
-        return pais
-# Función para guardar las consultas en el archivo "Historial.txt"
 def guardar_en_historial(ciudad, pais, informacion):
     marca_tiempo = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     consulta = f"Fecha y hora: {marca_tiempo}\nCiudad: {ciudad}, {pais}\n"
+<<<<<<< HEAD
     consulta += f"Temperatura actual: {informacion['temp_actual']}°C,"
     consulta += f"Temperatura máxima: {informacion['temp_max']}°C"
     consulta += f"Temperatura mínima: {informacion['temp_min']}°C\n"
@@ -126,10 +93,31 @@ def obtener_clima(nombre_ciudad, nombre_pais):
     api = os.getenv('API')
     global unidad_de_medida
     url = f"https://api.openweathermap.org/data/2.5/weather?q={nombre_ciudad},{nombre_pais}&lang=sp&appid={api}&units={unidad_de_medida}"
+=======
+    consulta += f"Temperatura actual: {informacion['temp_actual']}{símbolo_medida[unidad_de_medida]}, "
+    consulta += f"Temperatura máxima: {informacion['temp_max']}{símbolo_medida[unidad_de_medida]} y "
+    consulta += f"Temperatura mínima: {informacion['temp_min']}{símbolo_medida[unidad_de_medida]}.\n"
+    consulta += f"Condiciones climáticas: {informacion['clima']}, humedad: {informacion['humedad']}% .\n"
+    consulta += f"Velocidad del viento: {informacion['viento_vel']} m/s, "
+    consulta += f"Dirección del viento: {informacion['viento_dir']}° "
+    
+    if 'alerta' in informacion:
+        consulta += f"Alerta meteorológica: {informacion['alerta']}\n"
+    with open("Historial.txt", "a") as archivo:
+        archivo.write(consulta)
+        archivo.write("\n")
 
-    api_handler = ApiRequestHandler(url)#construcción de objeto para el api request
-    result = api_handler.retry_request()
+def validar_entrada(texto):
+    solo_letras = re.compile(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$')
+    return solo_letras.match(texto) is not None
+>>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
 
+@app.route("/")
+def home():
+    mensaje_preferencia = cargar_preferencia_unidades()
+    return render_template('index.html', mensaje_preferencia=mensaje_preferencia, simbolo=símbolo_medida[unidad_de_medida])
+
+<<<<<<< HEAD
     if result["status"] == "success":
         data = result["data"]#navegación dentro del JSON obtenido en formato diccionario, utilizando slicing
         clima = data['weather'][0]['description']
@@ -156,47 +144,109 @@ def obtener_clima(nombre_ciudad, nombre_pais):
             "viento_vel": viento_velocidad,
             "viento_dir": viento_direccion
         }
+=======
+@app.route('/consulta_clima')
+def consulta_clima():
+    return render_template('obtenerCLima.html')
 
-        # Verificar si hay alertas meteorológicas en los datos recibidos
-        if 'alerts' in data:
-            informacion['alerta'] = data['alerts'][0]['description']
+@app.route("/consulta_clima" , methods=['GET','POST'])
+def obtener_clima():
+    # Recibe los datos del formulario o de la url
+    ciudad = request.args.get('ciudad') or request.form.get('ciudad', '').strip()
+    pais = request.args.get('pais') or request.form.get('pais', '').strip()
+>>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
 
-        # Llamar a la función para guardar en el historial
-        guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
+    if ciudad and pais:
+        load_dotenv()
+        api=os.getenv('API')
+        api_url = f"https://api.openweathermap.org/data/2.5/weather?q={ciudad},{pais}&lang=sp&appid={api}&units={unidad_de_medida}"
+        
+        api_handler = ApiRequestHandler(api_url)
+        result = api_handler.retry_request()
+        
+        if result["status"] == "success":
+            data = result["data"]
+            weather_info = {
+                "temperature": data.get("main", {}).get("temp"),
+                "temp_max": data.get("main", {}).get("temp_max"),
+                "temp_min": data.get("main", {}).get("temp_min"),
+                "description": data.get("weather", [{}])[0].get("description"),
+                "wind_speed": data.get("wind", {}).get("speed"),
+                "wind_direction": data.get("wind", {}).get("deg", "No disponible"),
+                "icon": data.get("weather",[{}])[0].get("icon"),
+                "humidity":data.get("main",{}).get("humidity")
+            }
+            informacion = {
+                "temp_actual": weather_info["temperature"],
+                "temp_max": weather_info["temp_max"],
+                "temp_min": weather_info["temp_min"],
+                "clima": weather_info["description"],
+                "viento_vel": weather_info["wind_speed"],
+                "viento_dir": weather_info["wind_direction"],
+                "humedad":weather_info ["humidity"]
+            }
+            if 'alerts' in data:
+                informacion['alerta'] = data['alerts'][0]['description']
+            guardar_en_historial(ciudad, pais, informacion)
+            return render_template('resultado.html', ciudad=ciudad, pais=pais, weather_info=weather_info, unidad=símbolo_medida[unidad_de_medida])
+        elif result["status"] == "error":
+            flash(result["message"])
+            return redirect(url_for('consulta_clima'))
+        else:
+            return flash(msg="ERROR \nNo se pudo obtener la información del clima.")
     else:
-        print(result["message"])
+        return render_template('consulta_clima.html', ciudad=ciudad, pais=pais)
 
-def obtener_pronostico(nombre_ciudad, nombre_pais):
+@app.route('/consulta_pronostico')
+def consulta_pronóstico():
+    return render_template('obtener_pronostico.html')
+
+@app.route("/consulta_pronostico", methods=['POST'])
+def obtener_pronóstico():
     load_dotenv()
-    api = os.getenv('API')
-    global unidad_de_medida
-    url_pronostico = f"https://api.openweathermap.org/data/2.5/forecast?q={nombre_ciudad},{nombre_pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
-
-    api_handler = ApiRequestHandler(url_pronostico)
-    result = api_handler.retry_request()
+    api=os.getenv('API')
+    ciudad = request.form.get('ciudad')
+    pais = request.form.get('pais')
+    if not validar_entrada(ciudad) or not validar_entrada(pais):
+        flash("Por favor, ingrese solo letras en ambos campos.")
+        return redirect(url_for('consulta_pronostico'))
     
+    api_url = f"https://api.openweathermap.org/data/2.5/forecast?q={ciudad},{pais}&cnt=40&lang=sp&appid={api}&units={unidad_de_medida}"
+    
+    api_handler = ApiRequestHandler(api_url)
+    result = api_handler.retry_request()
     pronosticos_por_dia = {}
+    resumen_datos = {}
+    
     if result["status"] == "success":
         data = result["data"]
-        print(f"Pronóstico de 5 días para {nombre_ciudad}, {nombre_pais}:\n")
-        # Filtrar registros de las 12:00 de cada día y calcular la media de temp. máxima y mínima
         for item in data['list']:
-            fecha = item['dt_txt'].split(" ")[0]  # Obtener solo la fecha
-            hora = item['dt_txt'].split(" ")[1]   # Obtener la hora
-            # Elegir el pronóstico de las 12:00 de cada día
+            fecha = item['dt_txt'].split(" ")[0]
+            hora = item['dt_txt'].split(" ")[1]
             if hora == "12:00:00":
                 pronosticos_por_dia[fecha] = {
                     "clima": item['weather'][0]['description'],
                     "temp": item['main']['temp'],
                     "temp_max": item['main']['temp_max'],
                     "temp_min": item['main']['temp_min'],
+<<<<<<< HEAD
                     "humedad": item['main']['humidity'],
                     "fenomenos": item['weather'][0]['main'], # Fenómenos meteorológicos
                     "viento_velocidad" : item['wind']['speed'],  # Velocidad del viento
                     "viento_direccion" : item['wind'].get('deg', 'No disponible')  # Dirección del viento si está disponible
+=======
+                    "fenomenos": item['weather'][0]['main'],
+                    "viento_velocidad": item['wind']['speed'],
+                    "viento_direccion": item['wind'].get('deg', 'No disponible'),
+                    "humedad": item['main'].get('humidity'),
+                    "icon": item['weather'][0]['icon']
+>>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
                 }
-
-        # Mostrar el pronóstico para los próximos 5 días con fenómenos meteorológicos
+                if fecha not in resumen_datos:
+                    resumen_datos[fecha] = {"temp": [], "humedad": [], "climas": []}
+                    resumen_datos[fecha]["temp"].append(item['main']['temp'])
+                    resumen_datos[fecha]["humedad"].append(item['main'].get('humidity', 0))
+                    resumen_datos[fecha]["climas"].append(item['weather'][0]['main'])
         for fecha, item in pronosticos_por_dia.items():
             clima = item['clima']
             temperatura = item['temp']
@@ -206,11 +256,11 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             fenomenos = item['fenomenos']
             wind_vel= item['viento_velocidad']
             wind_dir=item['viento_direccion']
-
-            # Identificar posibles fenómenos meteorológicos peligrosos
+            humedad=item['humedad']
             alerta = ""
             if fenomenos in ['Rain', 'Thunderstorm', 'Snow']:
                 alerta = f"¡Atención! Se esperan {fenomenos.lower()}."
+<<<<<<< HEAD
 
             # Mostrar el pronóstico con la información del clima y fenómenos
             print(f"{fecha}: {clima} con una temperatura de {temperatura}{símbolo_medida[unidad_de_medida]}.")
@@ -232,155 +282,99 @@ def obtener_pronostico(nombre_ciudad, nombre_pais):
             }
 
             # Verificar si hay alertas meteorológicas en los datos recibidos
+=======
+                item['alerta'] = alerta
+            informacion = {
+                    "temp_actual": temperatura,
+                    "temp_max": temp_max,
+                    "temp_min": temp_min,
+                    "clima": clima,
+                    "viento_vel": wind_vel,
+                    "viento_dir": wind_dir,
+                    "humedad": humedad
+                }
+>>>>>>> f873fd3292e0a07bb858c536fa891417352f51a6
             if 'alerts' in data:
                 informacion['alerta'] = data['alerts'][0]['description']
-
-            # Guardar en el historial
-            guardar_en_historial(nombre_ciudad, nombre_pais, informacion)
+            guardar_en_historial(ciudad, pais, informacion)
+        resumen_promedios = {}
+        for fecha, datos in resumen_datos.items():
+            promedio_temp = sum(datos["temp"]) / len(datos["temp"])
+            promedio_humedad = sum(datos["humedad"]) / len(datos["humedad"])
+            clima_frecuente = max(set(datos["climas"]), key=datos["climas"].count)
+            resumen_promedios[fecha] = {
+                "temp_promedio": promedio_temp,
+                "humedad_promedio": promedio_humedad,
+                "clima_frecuente": clima_frecuente
+            }
+    elif result["status"] == "error":
+        flash(result["message"])
+        return redirect(url_for('consulta_clima'))
     else:
-        print(result["message"])
+        flash("Error al obtener el pronóstico. Intente de nuevo más tarde.")
+        return redirect(url_for('consulta_pronostico'))
+    return render_template('resultado.html', ciudad=ciudad,pais=pais,pronosticos=pronosticos_por_dia, resumen=resumen_promedios,unidad=símbolo_medida[unidad_de_medida])
+    #cuando se pasan los datos en render_template, la primer variable corresponde a una variable declarada en html, y la segunda en python
 
+@app.route('/consulta_desde_historial/<ciudad>/<pais>', methods=['GET'])
+def consulta_desde_historial(ciudad, pais):
+    return render_template('obtenerClima.html', ciudad=ciudad, pais=pais)
 
+@app.route('/historial')
 def ver_historial():
-    print("\n"+("="*20)+" Ver Historial "+("="*20)+"\n")
+    consultas = []
     try:
-        # Abrir el archivo de historial en modo lectura
         with open("Historial.txt", "r") as archivo:
-            lineas = archivo.readlines()
-            if len(lineas) == 0:
-                print("No hay consultas en el historial.")
-                return
-            
-            print("1. Ver últimas 5 consultas")
-            print("2. Buscar consulta por ciudad")
-            print("3. Borrar historial")  
-            opcion = input("Seleccione una opción: ")
-
-            if opcion == "1":
-                # Mostrar las últimas 5 consultas
-                print("\nÚltimas 5 consultas:\n")
-                for linea in lineas[-35:]:#modificación del indice en negativo para traer las últimas ingresadas
-                    print(linea, end="")
-                    time.sleep(0.5)
-                time.sleep(2)
-            elif opcion == "2":
-                ciudad = input("Ingrese el nombre de la ciudad a buscar: ").lower()
-                print(f"\nConsultas relacionadas con {ciudad}:\n")
-                encontrado = False
-                for linea in lineas:
-                    if ciudad in linea.lower():
-                        print(linea, end="")
-                        encontrado = True
-                if not encontrado:
-                    print(f"No se encontraron consultas para la ciudad: {ciudad}")
-            elif opcion == "3":
-                # Llamar a la función de borrar historial
-                borrar_historial()
-            else:
-                print("Opción no válida.")
-    
+            entrada = {}
+            for linea in archivo:
+                if linea.startswith("Fecha y hora:"):
+                    if entrada:
+                        consultas.append(entrada)  
+                    entrada = {"fecha_hora": linea.strip().split(": ", 1)[1]}
+                elif linea.startswith("Ciudad:"):
+                    ciudad_pais = linea.strip().split(": ", 1)[1].split(", ")
+                    entrada["ciudad"] = ciudad_pais[0]
+                    entrada["pais"] = ciudad_pais[1]
+                else:
+                    entrada["detalles"] = entrada.get("detalles", "") + linea
+            if entrada:
+                consultas.append(entrada)
     except FileNotFoundError:
-        print("El archivo de historial no existe aún. No se han registrado consultas.")
+        flash("El archivo de historial no existe aún. No se han registrado consultas.")
+    
+    for consulta in consultas:
+        if 'ciudad' not in consulta or 'pais' not in consulta:
+            flash("Una de las entradas no tiene los datos necesarios para realizar una nueva consulta.")
+            continue
+    return render_template('ver_historial.html', consultas=consultas)
 
-# Función para borrar el contenido del historial
+@app.route('/borrar_historial', methods=['POST'])
 def borrar_historial():
     with open("Historial.txt", "w") as archivo:
-        archivo.write("")  # Sobrescribe el archivo con un contenido vacío
-    print("El historial ha sido borrado correctamente.")
+        archivo.write("")
+    flash("El historial ha sido borrado correctamente.")
+    return redirect(url_for('ver_historial'))
 
-
+@app.route('/cambiar_unidades', methods=['GET', 'POST'])
 def cambiar_unidades():
-    print("\n"+("="*20)+" Cambiar unidades "+("="*20)+"\n")
-    global unidad_de_medida  # Usar la variable global
-    unidad_actual = 'Celsius' if unidad_de_medida == 'metric' else 'Imperial'# Mensaje que avisa la unidad de medida en la que estas
-
-    print(f"Unidad de medida actual: {unidad_actual}")
-    print("Selecciona la unidad de medida:")
-    print("1. Métrico (Celsius)")
-    print("2. Imperial (Fahrenheit)\n")
-    print("si deseas volver al menú principal oprime la tecla 3")
-    while True:
-        seleccion = input("Ingresa tu opción: ")
+    global unidad_de_medida
+    unidad_actual = 'Celsius' if unidad_de_medida == 'metric' else 'Imperial'
+    
+    if request.method == 'POST':
+        seleccion = request.form.get("unidad")
         
-        if seleccion == '1':
-            if unidad_de_medida == 'metric':
-                print("Ya estás utilizando la unidad de medida: Celsius.")
-            else:
-                unidad_de_medida = 'metric'  # Cambiar a Celsius
-                print("Unidad de medida cambiada a Celsius.")
-                with open("Preferencia.txt", "w") as archivo:
-                    archivo.write(unidad_de_medida)
-                    archivo.write("\n")
-            break  # Salir del bucle, ya que se tomó una decisión
-        elif seleccion == '2':
-            if unidad_de_medida == 'imperial':
-                print("Ya estás utilizando la unidad de medida: Fahrenheit.")
-            else:
-                unidad_de_medida = 'imperial'  # Cambiar a Fahrenheit
-                print("Unidad de medida cambiada a Fahrenheit.")
-                with open("Preferencia.txt", "w") as archivo:
-                    archivo.write(unidad_de_medida)
-                    archivo.write("\n")
-            break  # Salir del bucle, ya que se tomó una decisión
-        else:
-            print("Opción no válida. Intenta de nuevo.")
+        if seleccion == 'metric':
+            if unidad_de_medida != 'metric':
+                unidad_de_medida = 'metric'
+                flash("Unidad de medida cambiada a Celsius.")
+        elif seleccion == 'imperial':
+            if unidad_de_medida != 'imperial':
+                unidad_de_medida = 'imperial'
+                flash("Unidad de medida cambiada a Fahrenheit.")
+        with open("Preferencia.txt", "w") as archivo:
+            archivo.write(unidad_de_medida)
+        return redirect(url_for('cambiar_unidades'))
+    return render_template("cambiar_unidades.html", unidad_actual=unidad_actual, simbolo=símbolo_medida[unidad_de_medida])
 
-
-def ejecutar_opcion(opcion):
-    if opcion == 1:
-        time.sleep(2)
-        print("\n"+("="*20)+" Obtener clima "+("="*20)+"\n")
-        nombre_ciudad = validar_ciudad()
-        nombre_pais = validar_pais()
-        obtener_clima(nombre_ciudad, nombre_pais)
-    elif opcion == 2:
-        time.sleep(2)
-        print("\n"+("="*20)+" Obtener pronóstico "+("="*20)+"\n")
-        nombre_ciudad = validar_ciudad()
-        nombre_pais = validar_pais()
-        obtener_pronostico(nombre_ciudad, nombre_pais)
-    elif opcion == 3:
-        time.sleep(2)
-        ver_historial()
-    elif opcion == 4:
-        time.sleep(2)
-        cambiar_unidades()
-    elif opcion == 5:
-        print("Saliendo del programa...")
-        return False
-    else:
-        print("Opción no válida.")
-    return True
-
-def preguntar_volver_al_menu():
-    while True:
-        respuesta = input("¿Desea volver al menú? (si/no): ").strip().lower()
-        if respuesta == 'si':
-            return True  # Volver al menú
-        elif respuesta == 'no':
-            print("Saliendo del programa...")
-            return False  # Finalizar programa
-        else:
-            print("Respuesta no válida. Por favor, ingresa 'si' para sí o 'no' para no.")
-
-def main():
-    cargar_preferencia_unidades()  # Cargar la preferencia de unidad al iniciar
-    print("\n"+("="*20)+" BIENVENIDO A NUESTRA APLICACIÓN DEL CLIMA "+("="*20)+"\n")
-    time.sleep(2)
-    while True:#funcion main del codigo, donde se hace las llamadas originales
-        mostrar_menu()#llamada a la función menú
-        try:
-            time.sleep(1)
-            seleccion = int(input("Selecciona una opción (1-5): "))
-            continuar = ejecutar_opcion(seleccion)
-            if not continuar:
-                break
-            if not preguntar_volver_al_menu():#llamada la función que al finalizar la ejecución de alguna de las opciones del menú, consulte si volver al mismo o salir
-                break
-            time.sleep(2)
-        except ValueError:
-            print("Por favor, ingresa un número entero válido.")
-            time.sleep(2)
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3000, debug=True)
