@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Pronóstico</title>
+    <link rel="icon" type="png" href="/static/images/galleta.png">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Consulta Pronóstico</h1>
+        
+        <form action="/consulta_pronostico" method="POST">
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad" name="ciudad" required placeholder="Ingrese una ciudad...">
+            
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais" required placeholder="Ingrese el país...">
+            
+            <button type="submit">Consultar Pronóstico</button>
+        </form>
+    </div>
+</body>
+</html>

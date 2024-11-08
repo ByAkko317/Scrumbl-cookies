@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener clima</title>
+    <link rel="icon" type="png" href="/static/images/galleta.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .result {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Consulta Clima</h1>
+        
+        <form method="POST" action="{{ url_for('consulta_clima') }}">
+            <label for="ciudad">Ciudad:</label>
+            <input type="text" id="ciudad"  name="ciudad" value="{{ciudad if ciudad else ''}}" required placeholder="Ingrese la ciudad..."/>
+            
+            <label for="pais">País:</label>
+            <input type="text" id="pais" name="pais"  value="{{pais if pais else ''}}" required placeholder="Ingrese el país..."/>
+            
+            <button type="submit">Consultar clima</button>
+        </form>
+    </div>
+</body>
+</html>
